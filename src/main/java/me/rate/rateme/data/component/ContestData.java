@@ -9,11 +9,7 @@ public interface ContestData {
 
     Page<Contest> findAllByCompanyId(Long companyId, Pageable pageable);
 
-    Page<Contest> findAllWithoutCompany(Pageable pageable);
-
     List<Contest> findAllByCompanyId(Long companyId);
-
-    List<Contest> findAllWithoutCompany();
 
     Contest findById(Long id);
 

@@ -49,8 +49,7 @@ public class CodeStreamingHandler implements WebSocketHandler {
     }
 
     @Override
-    public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus)
-            throws Exception {
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) {
         String roomId = (String) session.getAttributes().get("roomId");
         log.info("Closing connection for room -> '{}'", roomId);
         sessionStorage.getSessions().remove(roomId);
