@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/postgres
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://skillscan:eureka123user@eureka-service:8761/eureka/

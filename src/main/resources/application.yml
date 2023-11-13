@@ -1,0 +1,45 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: rate-me
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+    hikari:
+      minimum-idle: 2
+      maximum-pool-size: 4
+      schema: rateme
+  flyway:
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    default-schema: ${spring.datasource.hikari.schema}
+    table: flyway-rateme-service-history
+
+
+application:
+  websocket:
+    room-path: /room/{roomId}
+
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://skillscan:eureka123user@localhost:8761/eureka/
+
+springdoc:
+  swagger-ui:
+    path: swagger.html
