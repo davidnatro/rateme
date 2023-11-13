@@ -13,13 +13,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     Page<Task> findAllByContestId(Long contestId, Pageable pageable);
 
-    Page<Task> findAllByContestIdIsNull(Pageable pageable);
-
     List<Task> findAllByContestId(Long contestId);
 
-    List<Task> findAllByContestIdIsNull();
-
     Optional<Task> findByName(String name);
-
-    boolean existsByName(String name);
 }

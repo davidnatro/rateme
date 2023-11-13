@@ -60,6 +60,9 @@ CREATE TABLE IF NOT EXISTS rateme.user_role (
         CONSTRAINT fk__roles__id REFERENCES rateme.roles (id)
 );
 
+CREATE INDEX IF NOT EXISTS idx__users__username ON rateme.users (username);
+CREATE INDEX IF NOT EXISTS idx__roles__name ON rateme.roles (name);
+
 ALTER TABLE rateme.user_role
     DROP CONSTRAINT IF EXISTS unique__role_user;
 ALTER TABLE rateme.user_role

@@ -9,11 +9,7 @@ public interface TaskData {
 
     Page<Task> findAllByContestId(Long contestId, Pageable pageable);
 
-    Page<Task> findAllWithoutContest(Pageable pageable);
-
     List<Task> findAllByContestId(Long contestId);
-
-    List<Task> findAllWithoutContest();
 
     Task findById(Long id);
 

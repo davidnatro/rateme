@@ -26,8 +26,7 @@ public class SecurityConfig {
         return http.cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authenticationProvider(authenticationProvider)
-                .authorizeHttpRequests(
-                        request -> request.requestMatchers("/**").hasRole("USER"))
+                .authorizeHttpRequests(request -> request.requestMatchers("/**").hasRole("USER"))
                 .httpBasic(Customizer.withDefaults())
                 .build();
     }

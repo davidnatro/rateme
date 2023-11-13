@@ -18,40 +18,25 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TaskDataImpl implements TaskData {
 
-    private final TaskRepository taskRepository;
+    private final TaskRepository repository;
 
     @Override
     public Page<Task> findAllByContestId(Long contestId, Pageable pageable) {
-        return taskRepository.findAllByContestId(contestId, pageable);
-    }
-
-    @Override
-    public Page<Task> findAllWithoutContest(Pageable pageable) {
-        return taskRepository.findAllByContestIdIsNull(pageable);
+        return repository.findAllByContestId(contestId, pageable);
     }
 
     @Override
     public List<Task> findAllByContestId(Long contestId) {
-        return taskRepository.findAllByContestId(contestId);
-    }
-
-    @Override
-    public List<Task> findAllWithoutContest() {
-        return taskRepository.findAllByContestIdIsNull();
+        return repository.findAllByContestId(contestId);
     }
 
     @Override
     public Task findById(Long id) {
-        if (id == null) {
-            log.warn("id cannot be null!");
-            throw new IllegalArgumentException("cannot find task by null id");
-        }
-
-        Optional<Task> task = taskRepository.findById(id);
+        Optional<Task> task = repository.findById(id);
 
         if (task.isEmpty()) {
-            log.warn("Cannot find task with id '{}'", id);
-            throw new EntityNotFoundException("Task not found");
+            log.warn("task with id '{}' not found", id);
+            throw new EntityNotFoundException("task not found");
         }
 
         return task.get();
@@ -59,16 +44,11 @@ public class TaskDataImpl implements TaskData {
 
     @Override
     public Task findByName(String name) {
-        if (name == null) {
-            log.warn("name cannot be null!");
-            throw new IllegalArgumentException("cannot find task by null name");
-        }
-
-        Optional<Task> task = taskRepository.findByName(name);
+        Optional<Task> task = repository.findByName(name);
 
         if (task.isEmpty()) {
-            log.warn("Cannot find task with name '{}'", name);
-            throw new EntityNotFoundException("Task not found");
+            log.warn("task '{}' not found", name);
+            throw new EntityNotFoundException("task not found");
         }
 
         return task.get();
@@ -76,46 +56,26 @@ public class TaskDataImpl implements TaskData {
 
     @Override
     public Task create(Task task) {
-        if (task == null) {
-            log.warn("Cannot create null task");
-            throw new IllegalArgumentException("task cannot be null during creation!");
-        }
-
         if (task.getId() != null) {
-            log.warn("Cannot create task with non null id!");
-            throw new IllegalArgumentException("Cannot create task with non null id!");
-        }
-
-        if (isTaskAlreadyExists(task)) {
-            log.warn("task with name '{}' already exists", task.getName());
+            log.warn("task '{}' already exists", task.getName());
             throw new EntityExistsException("task already exists");
         }
 
-        return taskRepository.save(task);
+        return repository.save(task);
     }
 
     @Override
     public Task update(Task task) {
-        if (!taskRepository.existsById(task.getId())) {
-            log.warn("task with id '{}' was not found", task.getId());
-            throw new EntityNotFoundException("Task not found");
+        if (task.getId() == null) {
+            log.warn("task '{}' not found", task.getName());
+            throw new EntityNotFoundException("task not found");
         }
 
-        return taskRepository.save(task);
+        return repository.save(task);
     }
 
     @Override
     public void deleteById(Long id) {
-        if (!taskRepository.existsById(id)) {
-            log.warn("task with id '{}' not found", id);
-            throw new EntityNotFoundException("Task not found");
-        }
-
-        taskRepository.deleteById(id);
-    }
-
-    private boolean isTaskAlreadyExists(Task task) {
-        return task.getContest() == null && taskRepository.existsByName(task.getName())
-                || task.getContest() != null && task.getContest().getTasks().contains(task);
+        repository.deleteById(id);
     }
 }

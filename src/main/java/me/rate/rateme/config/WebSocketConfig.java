@@ -1,7 +1,7 @@
-package me.rate.rateme.websocket.config;
+package me.rate.rateme.config;
 
 import lombok.RequiredArgsConstructor;
-import me.rate.rateme.websocket.config.property.WebSocketProperty;
+import me.rate.rateme.config.property.WebSocketProperty;
 import me.rate.rateme.websocket.handler.CodeStreamingHandler;
 import me.rate.rateme.websocket.interceptor.PathVariableExtractor;
 import org.springframework.context.annotation.Configuration;

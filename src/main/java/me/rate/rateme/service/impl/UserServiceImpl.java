@@ -2,10 +2,17 @@ package me.rate.rateme.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.rate.rateme.data.repository.UserRepository;
+import me.rate.rateme.data.component.RoleData;
+import me.rate.rateme.data.component.UserData;
+import me.rate.rateme.data.dto.CreateUserDto;
+import me.rate.rateme.data.dto.UpdateUserDto;
+import me.rate.rateme.data.entity.User;
+import me.rate.rateme.data.model.UserModel;
+import me.rate.rateme.mapper.UserMapper;
 import me.rate.rateme.service.UserService;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -13,36 +20,47 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
+    private final UserData userData;
+    private final RoleData roleData;
+    private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void createUser(UserDetails user) {
-
+    public Page<UserModel> findAll(Pageable pageable) {
+        return userData.findAll(pageable).map(userMapper::toModel);
     }
 
     @Override
-    public void updateUser(UserDetails user) {
+    public UserModel create(CreateUserDto request) {
+        User user = new User();
+        user.setUsername(request.getUsername());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
 
+        return userMapper.toModel(userData.create(user));
     }
 
     @Override
-    public void deleteUser(String username) {
+    public UserModel updateById(Long id, UpdateUserDto request) {
+        User user = userData.findById(id);
 
+        if (request.getUsername() != null) {
+            user.setUsername(request.getUsername());
+        }
+
+        if (request.getPassword() != null) {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
+
+        if (request.getRoles() != null && !request.getRoles().isEmpty()) {
+            user.getRoles().clear();
+            request.getRoles().forEach(r -> user.getRoles().add(roleData.findByName(r)));
+        }
+
+        return userMapper.toModel(userData.update(user));
     }
 
     @Override
-    public void changePassword(String oldPassword, String newPassword) {
-
-    }
-
-    @Override
-    public boolean userExists(String username) {
-        return true;
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("called by '{}'", username);
-        return userRepository.findByUsername(username).get();
+    public void deleteById(Long id) {
+        userData.deleteById(id);
     }
 }

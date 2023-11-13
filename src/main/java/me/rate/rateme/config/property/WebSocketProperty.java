@@ -1,4 +1,4 @@
-package me.rate.rateme.websocket.config.property;
+package me.rate.rateme.config.property;
 
 import lombok.Getter;
 import lombok.Setter;

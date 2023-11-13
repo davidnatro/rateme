@@ -2,6 +2,8 @@ package me.rate.rateme.data.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -12,6 +14,7 @@ import java.time.ZonedDateTime;
 import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
+import me.rate.rateme.data.enums.Difficulty;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -38,6 +41,9 @@ public class Task {
     private String outputFormat;
 
     private String codeExample;
+
+    @Enumerated(EnumType.STRING)
+    private Difficulty difficulty;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")

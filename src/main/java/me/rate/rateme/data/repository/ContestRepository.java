@@ -13,11 +13,7 @@ public interface ContestRepository extends JpaRepository<Contest, Long> {
 
     Page<Contest> findAllByCompanyId(Long companyId, Pageable pageable);
 
-    Page<Contest> findAllByCompanyIdIsNull(Pageable pageable);
-
     List<Contest> findAllByCompanyId(Long companyId);
-
-    List<Contest> findAllByCompanyIdIsNull();
 
     Optional<Contest> findByName(String name);
 }
