@@ -19,5 +19,5 @@ public interface CompanyData {
 
     Company update(Company company);
 
-    void deleteById(Long id);
+    void deleteByName(String name);
 }

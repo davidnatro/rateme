@@ -26,15 +26,20 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public RoleModel findByName(String name) {
+        return roleMapper.toModel(roleData.findByName(name));
+    }
+
+    @Override
     public RoleModel create(CreateRoleDto request) {
         Role role = new Role();
-        role.setName(request.getName());
+        role.setName(request.name());
 
         return roleMapper.toModel(roleData.create(role));
     }
 
     @Override
-    public void deleteById(Long id) {
-        roleData.deleteById(id);
+    public void deleteByName(String name) {
+        roleData.deleteByName(name);
     }
 }

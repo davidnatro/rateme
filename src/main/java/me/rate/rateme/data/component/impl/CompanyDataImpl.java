@@ -56,7 +56,7 @@ public class CompanyDataImpl implements CompanyData {
 
     @Override
     public Company create(Company company) {
-        if (company.getId() != null) {
+        if (repository.existsByName(company.getName())) {
             log.warn("company '{}' already exists", company.getName());
             throw new EntityExistsException("company already exists");
         }
@@ -66,8 +66,8 @@ public class CompanyDataImpl implements CompanyData {
 
     @Override
     public Company update(Company company) {
-        if (company.getId() == null) {
-            log.warn("company '{}' not found", company.getName());
+        if (!repository.existsById(company.getId())) {
+            log.warn("company with id '{}' not found", company.getId());
             throw new EntityNotFoundException("company not found");
         }
 
@@ -75,7 +75,7 @@ public class CompanyDataImpl implements CompanyData {
     }
 
     @Override
-    public void deleteById(Long id) {
-        repository.deleteById(id);
+    public void deleteByName(String name) {
+        repository.deleteByName(name);
     }
 }
