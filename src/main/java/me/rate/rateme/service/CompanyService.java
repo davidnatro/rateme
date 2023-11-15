@@ -1,6 +1,7 @@
 package me.rate.rateme.service;
 
 import me.rate.rateme.data.dto.CreateCompanyDto;
+import me.rate.rateme.data.dto.CreateContestDto;
 import me.rate.rateme.data.dto.UpdateCompanyDto;
 import me.rate.rateme.data.model.CompanyModel;
 import org.springframework.data.domain.Page;
@@ -14,11 +15,15 @@ public interface CompanyService {
 
     CompanyModel create(CreateCompanyDto createCompanyDto);
 
-    CompanyModel updateByName(String name, UpdateCompanyDto updateCompanyDto);
+    CompanyModel updateByName(String companyName, UpdateCompanyDto updateCompanyDto);
 
-    void hireEmployee(String name, String username);
+    void hireEmployee(String companyName, String username);
 
-    void fireEmployee(String name, String username);
+    void fireEmployee(String companyName, String username);
+
+    void createContest(String companyName, CreateContestDto createContestDto);
+
+    void deleteContest(String companyName, String contestName);
 
     void deleteByName(String name);
 }
