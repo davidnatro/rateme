@@ -1,6 +1,7 @@
 package me.rate.rateme.data.entity;
 
 import static me.rate.rateme.data.constants.SecurityConstants.ROLE_PREFIX;
+import static me.rate.rateme.data.enums.Role.COMPANY_HEAD;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -44,6 +45,10 @@ public class User implements UserDetails {
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    public boolean isHeadOfCompany() {
+        return roles.stream().anyMatch(r -> r.getName().equals(COMPANY_HEAD.name()));
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
