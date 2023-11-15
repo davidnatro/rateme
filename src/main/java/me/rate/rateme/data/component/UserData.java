@@ -20,5 +20,5 @@ public interface UserData extends UserDetailsService {
 
     User update(User user);
 
-    void deleteById(Long id);
+    void deleteByUsername(String username);
 }

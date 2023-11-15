@@ -1,5 +1,6 @@
 package me.rate.rateme.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,13 +30,24 @@ public class RoleController {
     private final RoleService roleService;
 
     @GetMapping
+    @Operation(summary = "get all roles")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Page of roles"),
             @ApiResponse(responseCode = "401", description = "Unauthorized access") })
     public ResponseEntity<Page<RoleModel>> getAllPageable(@PageableDefault Pageable pageable) {
         return ResponseEntity.ok(roleService.findAll(pageable));
     }
 
+    @GetMapping("/{name}")
+    @Operation(summary = "get role by name")
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Role"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized access"),
+            @ApiResponse(responseCode = "404", description = "Role not found") })
+    public ResponseEntity<RoleModel> getByName(@PathVariable String name) {
+        return ResponseEntity.ok(roleService.findByName(name));
+    }
+
     @PostMapping
+    @Operation(summary = "create role")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Created role"),
             @ApiResponse(responseCode = "401", description = "Unauthorized access"),
             @ApiResponse(responseCode = "409", description = "Role already exists") })
@@ -43,11 +55,12 @@ public class RoleController {
         return ResponseEntity.ok(roleService.create(request));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{name}")
+    @Operation(summary = "delete role")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Created role"),
             @ApiResponse(responseCode = "401", description = "Unauthorized access") })
-    public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
-        roleService.deleteById(id);
+    public ResponseEntity<Void> deleteRole(@PathVariable String name) {
+        roleService.deleteByName(name);
         return ResponseEntity.noContent().build();
     }
 }

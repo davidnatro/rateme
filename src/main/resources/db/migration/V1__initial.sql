@@ -4,7 +4,6 @@ CREATE TABLE IF NOT EXISTS rateme.companies (
     id       BIGSERIAL PRIMARY KEY,
     name     VARCHAR(256) UNIQUE NOT NULL,
     email    VARCHAR(256)        NOT NULL,
-    password VARCHAR(256)        NOT NULL,
     enabled  BOOLEAN             NOT NULL DEFAULT FALSE,
     created  TIMESTAMP WITH TIME ZONE     DEFAULT NOW(),
     modified TIMESTAMP

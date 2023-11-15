@@ -9,7 +9,9 @@ public interface RoleService {
 
     Page<RoleModel> findAll(Pageable pageable);
 
+    RoleModel findByName(String name);
+
     RoleModel create(CreateRoleDto request);
 
-    void deleteById(Long id);
+    void deleteByName(String name);
 }

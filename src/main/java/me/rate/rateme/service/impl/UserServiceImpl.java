@@ -31,36 +31,41 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserModel findByUsername(String username) {
+        return userMapper.toModel(userData.findByUsername(username));
+    }
+
+    @Override
     public UserModel create(CreateUserDto request) {
         User user = new User();
-        user.setUsername(request.getUsername());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setUsername(request.username());
+        user.setPassword(passwordEncoder.encode(request.password()));
 
         return userMapper.toModel(userData.create(user));
     }
 
     @Override
-    public UserModel updateById(Long id, UpdateUserDto request) {
-        User user = userData.findById(id);
+    public UserModel updateByUsername(String username, UpdateUserDto request) {
+        User user = userData.findByUsername(username);
 
-        if (request.getUsername() != null) {
-            user.setUsername(request.getUsername());
+        if (request.username() != null) {
+            user.setUsername(request.username());
         }
 
-        if (request.getPassword() != null) {
-            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        if (request.password() != null) {
+            user.setPassword(passwordEncoder.encode(request.password()));
         }
 
-        if (request.getRoles() != null && !request.getRoles().isEmpty()) {
+        if (request.roles() != null && !request.roles().isEmpty()) {
             user.getRoles().clear();
-            request.getRoles().forEach(r -> user.getRoles().add(roleData.findByName(r)));
+            request.roles().forEach(r -> user.getRoles().add(roleData.findByName(r)));
         }
 
         return userMapper.toModel(userData.update(user));
     }
 
     @Override
-    public void deleteById(Long id) {
-        userData.deleteById(id);
+    public void deleteByUsername(String username) {
+        userData.deleteByUsername(username);
     }
 }

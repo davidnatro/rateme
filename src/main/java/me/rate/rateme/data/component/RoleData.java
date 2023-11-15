@@ -17,5 +17,5 @@ public interface RoleData {
 
     Role update(Role role);
 
-    void deleteById(Long id);
+    void deleteByName(String name);
 }
