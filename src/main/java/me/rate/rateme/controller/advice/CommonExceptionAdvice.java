@@ -2,11 +2,13 @@ package me.rate.rateme.controller.advice;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import me.rate.rateme.data.model.ExceptionModel;
+import me.rate.rateme.exception.CacheOperationException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -31,5 +33,11 @@ public class CommonExceptionAdvice {
     @ExceptionHandler(AccessDeniedException.class)
     public ExceptionModel handleAccessDeniedException(AccessDeniedException exception) {
         return new ExceptionModel(exception.getMessage(), FORBIDDEN.value());
+    }
+
+    @ResponseStatus(INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(CacheOperationException.class)
+    public ExceptionModel handleCacheOperationException(CacheOperationException exception) {
+        return new ExceptionModel(exception.getMessage(), INTERNAL_SERVER_ERROR.value());
     }
 }

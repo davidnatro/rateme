@@ -37,6 +37,11 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    public Company findByNameEntity(String name) {
+        return companyData.findByName(name);
+    }
+
+    @Override
     public CompanyModel create(CreateCompanyDto createCompanyDto) {
         Company company = new Company();
         company.setName(createCompanyDto.name());
@@ -57,6 +62,11 @@ public class CompanyServiceImpl implements CompanyService {
             company.setEmail(updateCompanyDto.email());
         }
 
+        return companyMapper.toModel(companyData.update(company));
+    }
+
+    @Override
+    public CompanyModel update(Company company) {
         return companyMapper.toModel(companyData.update(company));
     }
 
