@@ -58,7 +58,7 @@ public class UserDataImpl implements UserData {
 
     @Override
     public User create(User user) {
-        if (user.getId() != null) {
+        if (repository.existsByUsername(user.getUsername())) {
             log.warn("user '{}' already exists", user.getUsername());
             throw new EntityExistsException("user already exists");
         }
@@ -68,8 +68,8 @@ public class UserDataImpl implements UserData {
 
     @Override
     public User update(User user) {
-        if (user.getId() == null) {
-            log.warn("user '{}' not found", user.getUsername());
+        if (!repository.existsById(user.getId())) {
+            log.warn("user with id '{}' not found", user.getId());
             throw new EntityNotFoundException("user not found");
         }
 
@@ -77,8 +77,8 @@ public class UserDataImpl implements UserData {
     }
 
     @Override
-    public void deleteById(Long id) {
-        repository.deleteById(id);
+    public void deleteByUsername(String username) {
+        repository.deleteByUsername(username);
     }
 
     @Override

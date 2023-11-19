@@ -8,7 +8,7 @@ spring:
     name: rate-me
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://10.114.0.2:5432/postgres
     username: postgres
     password: postgres
     hikari:
@@ -22,10 +22,11 @@ spring:
     default-schema: ${spring.datasource.hikari.schema}
     table: flyway-rateme-service-history
 
-
 application:
   websocket:
     room-path: /room/{roomId}
+  judge:
+    url: http://10.114.0.2:2358
 
 management:
   server:
@@ -39,6 +40,7 @@ eureka:
   client:
     service-url:
       defaultZone: http://skillscan:eureka123user@localhost:8761/eureka/
+    enabled: false
 
 springdoc:
   swagger-ui:

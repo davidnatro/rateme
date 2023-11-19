@@ -44,7 +44,7 @@ public class RoleDataImpl implements RoleData {
 
     @Override
     public Role create(Role role) {
-        if (role.getId() != null) {
+        if (repository.existsByName(role.getName())) {
             log.warn("role '{}' already exists", role.getName());
             throw new EntityExistsException("role already exists");
         }
@@ -54,8 +54,8 @@ public class RoleDataImpl implements RoleData {
 
     @Override
     public Role update(Role role) {
-        if (role.getId() == null) {
-            log.warn("role '{}' not found", role.getName());
+        if (!repository.existsById(role.getId())) {
+            log.warn("role with id '{}' not found", role.getId());
             throw new EntityNotFoundException("role not found");
         }
 
@@ -63,7 +63,7 @@ public class RoleDataImpl implements RoleData {
     }
 
     @Override
-    public void deleteById(Long id) {
-        repository.deleteById(id);
+    public void deleteByName(String name) {
+        repository.deleteByName(name);
     }
 }

@@ -10,9 +10,11 @@ public interface UserService {
 
     Page<UserModel> findAll(Pageable pageable);
 
+    UserModel findByUsername(String username);
+
     UserModel create(CreateUserDto request);
 
-    UserModel updateById(Long id, UpdateUserDto request);
+    UserModel updateByUsername(String username, UpdateUserDto request);
 
-    void deleteById(Long id);
+    void deleteByUsername(String username);
 }

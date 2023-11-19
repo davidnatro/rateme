@@ -1,5 +1,6 @@
 package me.rate.rateme.data.model;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,8 +10,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleModel {
+public class ContestModel {
 
-    private String id;
+    private Long id;
     private String name;
+    private List<TaskModel> tasks;
 }
