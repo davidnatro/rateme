@@ -1,3 +1,5 @@
 package me.rate.rateme.data.dto;
 
-public record UpdateCompanyDto(String name, String email) { }
+import jakarta.validation.constraints.Email;
+
+public record UpdateCompanyDto(String name, @Email String email) { }

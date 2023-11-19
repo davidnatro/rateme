@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.rate.rateme.data.dto.CreateCompanyDto;
-import me.rate.rateme.data.dto.CreateContestDto;
 import me.rate.rateme.data.dto.UpdateCompanyDto;
 import me.rate.rateme.data.model.CompanyModel;
 import me.rate.rateme.service.CompanyService;
@@ -17,18 +16,18 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/company")
 @RequiredArgsConstructor
-@Tag(name = "Comapny", description = "company endpoints")
+@Tag(name = "Company", description = "company endpoints")
 public class CompanyController {
 
     private final CompanyService companyService;
@@ -60,17 +59,6 @@ public class CompanyController {
         return ResponseEntity.ok(companyService.create(request));
     }
 
-    @PostMapping("/{companyName}/contest")
-    @Operation(summary = "create contest")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Created or updated contest"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized access"), })
-    public ResponseEntity<Void> createContest(@PathVariable String companyName,
-                                              @Valid @RequestBody CreateContestDto request) {
-        companyService.createContest(companyName, request);
-        return ResponseEntity.noContent().build();
-    }
-
     @PutMapping("/{companyName}")
     @Operation(summary = "update company")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Updated company"),
@@ -82,27 +70,15 @@ public class CompanyController {
         return ResponseEntity.ok(companyService.updateByName(companyName, request));
     }
 
-    @PatchMapping("/{companyName}/hire/{username}")
+    @PostMapping("/{companyName}/employee")
     @Operation(summary = "hire employee")
     @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Hired employee"),
             @ApiResponse(responseCode = "401", description = "Unauthorized access"),
             @ApiResponse(responseCode = "403", description = "Forbidden access"),
             @ApiResponse(responseCode = "404", description = "Company or user not found") })
     public ResponseEntity<Void> hireEmployee(@PathVariable String companyName,
-                                             @PathVariable String username) {
+                                             @RequestParam String username) {
         companyService.hireEmployee(companyName, username);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PatchMapping("/{companyName}/fire/{username}")
-    @Operation(summary = "fire employee")
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Fired employee"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized access"),
-            @ApiResponse(responseCode = "403", description = "Forbidden access"),
-            @ApiResponse(responseCode = "404", description = "Company or user not found") })
-    public ResponseEntity<Void> fireEmployee(@PathVariable String companyName,
-                                             @PathVariable String username) {
-        companyService.fireEmployee(companyName, username);
         return ResponseEntity.noContent().build();
     }
 
@@ -117,15 +93,15 @@ public class CompanyController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{companyName}/contest/{contestName}")
-    @Operation(summary = "delete contest")
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Deleted contest"),
+    @DeleteMapping("/{companyName}/employee")
+    @Operation(summary = "fire employee")
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Fired employee"),
             @ApiResponse(responseCode = "401", description = "Unauthorized access"),
             @ApiResponse(responseCode = "403", description = "Forbidden access"),
-            @ApiResponse(responseCode = "404", description = "Company or contest not found") })
-    public ResponseEntity<Void> deleteContest(@PathVariable String companyName,
-                                              @PathVariable String contestName) {
-        companyService.deleteContest(companyName, contestName);
+            @ApiResponse(responseCode = "404", description = "Company or user not found") })
+    public ResponseEntity<Void> fireEmployee(@PathVariable String companyName,
+                                             @RequestParam String username) {
+        companyService.fireEmployee(companyName, username);
         return ResponseEntity.noContent().build();
     }
 }
