@@ -11,11 +11,11 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "application.redis")
 public class RedisProperty {
 
-    private String host;
-    private String password;
-    private Integer port;
-    private Integer db;
-    private Integer timeout;
-    private Integer maxTotal;
-    private Integer minIdle;
+  private String host;
+  private String password;
+  private Integer port;
+  private Integer db;
+  private Integer timeout;
+  private Integer maxTotal;
+  private Integer minIdle;
 }

@@ -11,9 +11,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ContestRepository extends JpaRepository<Contest, Long> {
 
-    Page<Contest> findAllByCompanyId(Long companyId, Pageable pageable);
+  Page<Contest> findAllByCompanyId(Long companyId, Pageable pageable);
 
-    List<Contest> findAllByCompanyId(Long companyId);
+  List<Contest> findAllByCompanyId(Long companyId);
 
-    Optional<Contest> findByName(String name);
+  Optional<Contest> findByName(String name);
 }

@@ -10,26 +10,26 @@ import org.springframework.web.util.UriTemplate;
 
 public class PathVariableExtractor implements HandshakeInterceptor {
 
-    private final UriTemplate uriTemplate;
+  private final UriTemplate uriTemplate;
 
-    public PathVariableExtractor(String uriPath) {
-        this.uriTemplate = new UriTemplate(uriPath);
-    }
+  public PathVariableExtractor(String uriPath) {
+    this.uriTemplate = new UriTemplate(uriPath);
+  }
 
-    @Override
-    public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
-                                   WebSocketHandler wsHandler, Map<String, Object> attributes) {
-        Map<String, String> match = uriTemplate.match(request.getURI().toString());
+  @Override
+  public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
+                                 WebSocketHandler wsHandler, Map<String, Object> attributes) {
+    Map<String, String> match = uriTemplate.match(request.getURI().toString());
 
-        match.computeIfPresent(PathVariableNames.ROOM_PATH_VARIABLE_NAME, (key, roomId) -> {
-            attributes.put(PathVariableNames.ROOM_PATH_VARIABLE_NAME, roomId);
-            return roomId;
-        });
+    match.computeIfPresent(PathVariableNames.ROOM_PATH_VARIABLE_NAME, (key, roomId) -> {
+      attributes.put(PathVariableNames.ROOM_PATH_VARIABLE_NAME, roomId);
+      return roomId;
+    });
 
-        return true;
-    }
+    return true;
+  }
 
-    @Override
-    public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response,
-                               WebSocketHandler wsHandler, Exception exception) { }
+  @Override
+  public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response,
+                             WebSocketHandler wsHandler, Exception exception) { }
 }

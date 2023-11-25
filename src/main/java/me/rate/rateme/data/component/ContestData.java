@@ -7,17 +7,17 @@ import org.springframework.data.domain.Pageable;
 
 public interface ContestData {
 
-    Page<Contest> findAllByCompanyId(Long companyId, Pageable pageable);
+  Page<Contest> findAllByCompanyId(Long companyId, Pageable pageable);
 
-    List<Contest> findAllByCompanyId(Long companyId);
+  List<Contest> findAllByCompanyId(Long companyId);
 
-    Contest findById(Long id);
+  Contest findById(Long id);
 
-    Contest findByName(String name);
+  Contest findByName(String name);
 
-    Contest create(Contest contest);
+  Contest create(Contest contest);
 
-    Contest update(Contest contest);
+  Contest update(Contest contest);
 
-    void deleteById(Long id);
+  void deleteById(Long id);
 }

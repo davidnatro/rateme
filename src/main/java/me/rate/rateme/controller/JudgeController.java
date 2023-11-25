@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Judge", description = "Judge API")
 public class JudgeController {
 
-    private final JudgeService judgeService;
+  private final JudgeService judgeService;
 
-    @GetMapping("/languages")
-    @Operation(summary = "get all available programming languages")
-    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "List of languages"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized access") })
-    public ResponseEntity<List<LanguageDto>> getLanguages() {
-        return ResponseEntity.ok(judgeService.getLanguages());
-    }
+  @GetMapping("/languages")
+  @Operation(summary = "get all available programming languages")
+  @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "List of languages"),
+      @ApiResponse(responseCode = "401", description = "Unauthorized access") })
+  public ResponseEntity<List<LanguageDto>> getLanguages() {
+    return ResponseEntity.ok(judgeService.getLanguages());
+  }
 }

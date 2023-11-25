@@ -2,9 +2,9 @@ package me.rate.rateme.data.cache;
 
 public interface RedisStringOperations<K, V> extends CacheOperations<K> {
 
-    V get(K key);
+  V get(K key);
 
-    void set(K key, V value);
+  void set(K key, V value);
 
-    void expire(K key, long seconds);
+  void expire(K key, long seconds);
 }

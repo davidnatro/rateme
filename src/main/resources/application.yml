@@ -8,7 +8,7 @@ spring:
     name: rate-me
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://10.114.0.2:5432/postgres
+    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: postgres
     hikari:
@@ -26,7 +26,7 @@ application:
   websocket:
     room-path: /room/{roomId}
   redis:
-    host: 10.114.0.2
+    host: localhost
     port: 6379
     db: 0
     password: redis
@@ -34,7 +34,7 @@ application:
     max-total: 10
     timeout: 30
   judge:
-    url: http://10.114.0.2:2358
+    url: http://localhost:2358
 
 management:
   server:
@@ -43,11 +43,10 @@ management:
     web:
       exposure:
         include: health, prometheus
-
 eureka:
   client:
     service-url:
-      defaultZone: http://skillscan:eureka123user@localhost:8761/eureka/
+      defaultZone: http://rateme:eureka123user@localhost:8761/eureka/
     enabled: false
 
 springdoc:

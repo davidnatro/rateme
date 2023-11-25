@@ -9,25 +9,25 @@ import org.springframework.data.domain.Pageable;
 
 public interface CompanyService {
 
-    Page<CompanyModel> findAll(Pageable pageable);
+  Page<CompanyModel> findAll(Pageable pageable);
 
-    CompanyModel findByName(String name);
+  CompanyModel findByName(String name);
 
-    Company findByNameEntity(String name);
+  Company findByNameEntity(String name);
 
-    CompanyModel create(CreateCompanyDto createCompanyDto);
+  CompanyModel create(CreateCompanyDto createCompanyDto);
 
-    CompanyModel updateByName(String companyName, UpdateCompanyDto updateCompanyDto);
+  CompanyModel updateByName(String companyName, UpdateCompanyDto updateCompanyDto);
 
-    CompanyModel update(Company company);
+  CompanyModel update(Company company);
 
-    Company checkIfUserHasAccessToCompany(String companyName);
+  Company checkIfUserHasAccessToCompany(String companyName);
 
-    void checkIfCurrentUserIsHeadOfCompany();
+  void checkIfCurrentUserIsHeadOfCompany();
 
-    void hireEmployee(String companyName, String username);
+  void hireEmployee(String companyName, String username);
 
-    void fireEmployee(String companyName, String username);
+  void fireEmployee(String companyName, String username);
 
-    void deleteByName(String name);
+  void deleteByName(String name);
 }

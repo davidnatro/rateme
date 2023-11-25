@@ -1,0 +1,36 @@
+### Get all roles
+
+GET http://localhost:8080/api/role
+Authorization: Basic admin password
+
+### Get all users
+
+GET http://localhost:8080/api/user
+Authorization: Basic user password
+
+### Create user
+
+POST http://localhost:8080/api/user
+Content-Type: application/json
+
+{
+  "username": "username",
+  "password": "password"
+}
+
+### Get created user
+
+GET http://localhost:8080/api/user/username
+Authorization: Basic user password
+
+### Create company
+
+### Create contest
+
+### Create task
+
+### Get langauges
+
+### Send submission
+
+### Check submission

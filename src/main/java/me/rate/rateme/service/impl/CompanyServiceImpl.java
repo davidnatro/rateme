@@ -22,104 +22,104 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CompanyServiceImpl implements CompanyService {
 
-    private final UserData userData;
-    private final CompanyData companyData;
-    private final CompanyMapper companyMapper;
+  private final UserData userData;
+  private final CompanyData companyData;
+  private final CompanyMapper companyMapper;
 
-    @Override
-    public Page<CompanyModel> findAll(Pageable pageable) {
-        return companyData.findAll(pageable).map(companyMapper::toModel);
+  @Override
+  public Page<CompanyModel> findAll(Pageable pageable) {
+    return companyData.findAll(pageable).map(companyMapper::toModel);
+  }
+
+  @Override
+  public CompanyModel findByName(String name) {
+    return companyMapper.toModel(companyData.findByName(name));
+  }
+
+  @Override
+  public Company findByNameEntity(String name) {
+    return companyData.findByName(name);
+  }
+
+  @Override
+  public CompanyModel create(CreateCompanyDto createCompanyDto) {
+    Company company = new Company();
+    company.setName(createCompanyDto.name());
+    company.setEmail(createCompanyDto.email());
+    return companyMapper.toModel(companyData.create(company));
+  }
+
+  @Override
+  public CompanyModel updateByName(String companyName, UpdateCompanyDto updateCompanyDto) {
+    Company company = checkIfUserHasAccessToCompany(companyName);
+    checkIfCurrentUserIsHeadOfCompany();
+
+    if (updateCompanyDto.name() != null) {
+      company.setName(updateCompanyDto.name());
     }
 
-    @Override
-    public CompanyModel findByName(String name) {
-        return companyMapper.toModel(companyData.findByName(name));
+    if (updateCompanyDto.email() != null) {
+      company.setEmail(updateCompanyDto.email());
     }
 
-    @Override
-    public Company findByNameEntity(String name) {
-        return companyData.findByName(name);
+    return companyMapper.toModel(companyData.update(company));
+  }
+
+  @Override
+  public CompanyModel update(Company company) {
+    return companyMapper.toModel(companyData.update(company));
+  }
+
+  @Override
+  public Company checkIfUserHasAccessToCompany(String companyName) {
+    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+    Company company = companyData.findByName(companyName);
+
+    if (company.getEmployees()
+        .stream()
+        .noneMatch(u -> u.getUsername().equals(user.getUsername()))) {
+      log.warn("User {} is not an employee of company {} trying to create contest",
+               user.getUsername(), companyName);
+      throw new AccessDeniedException("You are not an employee of this company");
     }
 
-    @Override
-    public CompanyModel create(CreateCompanyDto createCompanyDto) {
-        Company company = new Company();
-        company.setName(createCompanyDto.name());
-        company.setEmail(createCompanyDto.email());
-        return companyMapper.toModel(companyData.create(company));
+    return company;
+  }
+
+  @Override
+  public void checkIfCurrentUserIsHeadOfCompany() {
+    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+    if (!user.isHeadOfCompany()) {
+      log.warn("User {} is not a head of company trying to access forbidden action",
+               user.getUsername());
+      throw new AccessDeniedException("You are not a head of company");
     }
+  }
 
-    @Override
-    public CompanyModel updateByName(String companyName, UpdateCompanyDto updateCompanyDto) {
-        Company company = checkIfUserHasAccessToCompany(companyName);
-        checkIfCurrentUserIsHeadOfCompany();
+  @Override
+  public void hireEmployee(String companyName, String username) {
+    Company company = checkIfUserHasAccessToCompany(companyName);
+    checkIfCurrentUserIsHeadOfCompany();
+    User user = userData.findByUsername(username);
+    company.getEmployees().add(user);
+    companyData.update(company);
+  }
 
-        if (updateCompanyDto.name() != null) {
-            company.setName(updateCompanyDto.name());
-        }
+  @Override
+  public void fireEmployee(String companyName, String username) {
+    Company company = checkIfUserHasAccessToCompany(companyName);
+    checkIfCurrentUserIsHeadOfCompany();
+    User user = userData.findByUsername(username);
+    company.getEmployees().remove(user);
+    companyData.update(company);
+  }
 
-        if (updateCompanyDto.email() != null) {
-            company.setEmail(updateCompanyDto.email());
-        }
-
-        return companyMapper.toModel(companyData.update(company));
-    }
-
-    @Override
-    public CompanyModel update(Company company) {
-        return companyMapper.toModel(companyData.update(company));
-    }
-
-    @Override
-    public Company checkIfUserHasAccessToCompany(String companyName) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        Company company = companyData.findByName(companyName);
-
-        if (company.getEmployees()
-                .stream()
-                .noneMatch(u -> u.getUsername().equals(user.getUsername()))) {
-            log.warn("User {} is not an employee of company {} trying to create contest",
-                     user.getUsername(), companyName);
-            throw new AccessDeniedException("You are not an employee of this company");
-        }
-
-        return company;
-    }
-
-    @Override
-    public void checkIfCurrentUserIsHeadOfCompany() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (!user.isHeadOfCompany()) {
-            log.warn("User {} is not a head of company trying to access forbidden action",
-                     user.getUsername());
-            throw new AccessDeniedException("You are not a head of company");
-        }
-    }
-
-    @Override
-    public void hireEmployee(String companyName, String username) {
-        Company company = checkIfUserHasAccessToCompany(companyName);
-        checkIfCurrentUserIsHeadOfCompany();
-        User user = userData.findByUsername(username);
-        company.getEmployees().add(user);
-        companyData.update(company);
-    }
-
-    @Override
-    public void fireEmployee(String companyName, String username) {
-        Company company = checkIfUserHasAccessToCompany(companyName);
-        checkIfCurrentUserIsHeadOfCompany();
-        User user = userData.findByUsername(username);
-        company.getEmployees().remove(user);
-        companyData.update(company);
-    }
-
-    @Override
-    public void deleteByName(String name) {
-        checkIfUserHasAccessToCompany(name);
-        checkIfCurrentUserIsHeadOfCompany();
-        companyData.deleteByName(name);
-    }
+  @Override
+  public void deleteByName(String name) {
+    checkIfUserHasAccessToCompany(name);
+    checkIfCurrentUserIsHeadOfCompany();
+    companyData.deleteByName(name);
+  }
 }

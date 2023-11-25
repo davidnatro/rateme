@@ -7,11 +7,11 @@ import org.springframework.data.domain.Pageable;
 
 public interface RoleService {
 
-    Page<RoleModel> findAll(Pageable pageable);
+  Page<RoleModel> findAll(Pageable pageable);
 
-    RoleModel findByName(String name);
+  RoleModel findByName(String name);
 
-    RoleModel create(CreateRoleDto request);
+  RoleModel create(CreateRoleDto request);
 
-    void deleteByName(String name);
+  void deleteByName(String name);
 }

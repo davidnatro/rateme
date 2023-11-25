@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class JudgeServiceImpl implements JudgeService {
 
-    private final JudgeClient judgeClient;
+  private final JudgeClient judgeClient;
 
-    @Override
-    public List<LanguageDto> getLanguages() {
-        return judgeClient.getLanguages();
-    }
+  @Override
+  public List<LanguageDto> getLanguages() {
+    return judgeClient.getLanguages();
+  }
 }

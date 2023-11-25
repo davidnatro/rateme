@@ -17,29 +17,29 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RoleServiceImpl implements RoleService {
 
-    private final RoleData roleData;
-    private final RoleMapper roleMapper;
+  private final RoleData roleData;
+  private final RoleMapper roleMapper;
 
-    @Override
-    public Page<RoleModel> findAll(Pageable pageable) {
-        return roleData.findAll(pageable).map(roleMapper::toModel);
-    }
+  @Override
+  public Page<RoleModel> findAll(Pageable pageable) {
+    return roleData.findAll(pageable).map(roleMapper::toModel);
+  }
 
-    @Override
-    public RoleModel findByName(String name) {
-        return roleMapper.toModel(roleData.findByName(name));
-    }
+  @Override
+  public RoleModel findByName(String name) {
+    return roleMapper.toModel(roleData.findByName(name));
+  }
 
-    @Override
-    public RoleModel create(CreateRoleDto request) {
-        Role role = new Role();
-        role.setName(request.name());
+  @Override
+  public RoleModel create(CreateRoleDto request) {
+    Role role = new Role();
+    role.setName(request.name());
 
-        return roleMapper.toModel(roleData.create(role));
-    }
+    return roleMapper.toModel(roleData.create(role));
+  }
 
-    @Override
-    public void deleteByName(String name) {
-        roleData.deleteByName(name);
-    }
+  @Override
+  public void deleteByName(String name) {
+    roleData.deleteByName(name);
+  }
 }

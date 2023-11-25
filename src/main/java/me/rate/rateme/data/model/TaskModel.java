@@ -13,14 +13,14 @@ import me.rate.rateme.data.enums.Difficulty;
 @AllArgsConstructor
 public class TaskModel {
 
-    private Long id;
-    private String name;
-    private String pictureKey;
-    private String description;
-    private String inputFormat;
-    private String outputFormat;
-    private String codeExample;
-    private Difficulty difficulty;
-    private Map<String, Object> inputData;
-    private Map<String, Object> outputData;
+  private Long id;
+  private String name;
+  private String pictureKey;
+  private String description;
+  private String inputFormat;
+  private String outputFormat;
+  private String codeExample;
+  private Difficulty difficulty;
+  private Map<String, Object> inputData;
+  private Map<String, Object> outputData;
 }

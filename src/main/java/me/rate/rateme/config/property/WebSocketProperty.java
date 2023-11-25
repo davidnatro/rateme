@@ -11,5 +11,5 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "application.websocket")
 public class WebSocketProperty {
 
-    private String roomPath;
+  private String roomPath;
 }

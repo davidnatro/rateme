@@ -10,9 +10,9 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface TaskMapper {
 
-    TaskModel toModel(Task task);
+  TaskModel toModel(Task task);
 
-    @BeanMapping(
-            nullValuePropertyMappingStrategy = org.mapstruct.NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntity(@MappingTarget Task task, CreateTaskDto dto);
+  @BeanMapping(
+      nullValuePropertyMappingStrategy = org.mapstruct.NullValuePropertyMappingStrategy.IGNORE)
+  void updateEntity(@MappingTarget Task task, CreateTaskDto dto);
 }

@@ -18,31 +18,32 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Bean
-    @Primary
-    public SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                                   AuthenticationProvider authenticationProvider)
-            throws Exception {
-        return http.cors(AbstractHttpConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable)
-                .authenticationProvider(authenticationProvider)
-                .authorizeHttpRequests(request -> request.requestMatchers("/**").hasRole("USER"))
-                .httpBasic(Customizer.withDefaults())
-                .build();
-    }
+  @Bean
+  @Primary
+  public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                 AuthenticationProvider authenticationProvider)
+      throws Exception {
+    return http.cors(AbstractHttpConfigurer::disable)
+        .csrf(AbstractHttpConfigurer::disable)
+        .authenticationProvider(authenticationProvider)
+        .authorizeHttpRequests(
+            request -> request.requestMatchers("/**").hasAnyRole("USER", "ADMIN"))
+        .httpBasic(Customizer.withDefaults())
+        .build();
+  }
 
-    @Bean
-    public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService,
-                                                         PasswordEncoder passwordEncoder) {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(passwordEncoder);
+  @Bean
+  public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService,
+                                                       PasswordEncoder passwordEncoder) {
+    DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+    provider.setUserDetailsService(userDetailsService);
+    provider.setPasswordEncoder(passwordEncoder);
 
-        return provider;
-    }
+    return provider;
+  }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 }

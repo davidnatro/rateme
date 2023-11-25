@@ -24,39 +24,39 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Table(name = "contests")
 public class Contest {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    private String name;
+  private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "company_id")
-    private Company company;
+  @ManyToOne
+  @JoinColumn(name = "company_id")
+  private Company company;
 
-    @CreationTimestamp
-    private ZonedDateTime created;
+  @CreationTimestamp
+  private ZonedDateTime created;
 
-    @UpdateTimestamp
-    private ZonedDateTime modified;
+  @UpdateTimestamp
+  private ZonedDateTime modified;
 
-    @OneToMany(mappedBy = "contest", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Task> tasks = new HashSet<>();
+  @OneToMany(mappedBy = "contest", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Task> tasks = new HashSet<>();
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Contest contest = (Contest) o;
-        return Objects.equals(name, contest.name);
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
+    Contest contest = (Contest) o;
+    return Objects.equals(name, contest.name);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name);
+  }
 }

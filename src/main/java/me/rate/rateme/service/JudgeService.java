@@ -5,5 +5,5 @@ import me.rate.rateme.data.dto.LanguageDto;
 
 public interface JudgeService {
 
-    List<LanguageDto> getLanguages();
+  List<LanguageDto> getLanguages();
 }

@@ -18,64 +18,64 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TaskDataImpl implements TaskData {
 
-    private final TaskRepository repository;
+  private final TaskRepository repository;
 
-    @Override
-    public Page<Task> findAllByContestId(Long contestId, Pageable pageable) {
-        return repository.findAllByContestId(contestId, pageable);
+  @Override
+  public Page<Task> findAllByContestId(Long contestId, Pageable pageable) {
+    return repository.findAllByContestId(contestId, pageable);
+  }
+
+  @Override
+  public List<Task> findAllByContestId(Long contestId) {
+    return repository.findAllByContestId(contestId);
+  }
+
+  @Override
+  public Task findById(Long id) {
+    Optional<Task> task = repository.findById(id);
+
+    if (task.isEmpty()) {
+      log.warn("task with id '{}' not found", id);
+      throw new EntityNotFoundException("task not found");
     }
 
-    @Override
-    public List<Task> findAllByContestId(Long contestId) {
-        return repository.findAllByContestId(contestId);
+    return task.get();
+  }
+
+  @Override
+  public Task findByName(String name) {
+    Optional<Task> task = repository.findByName(name);
+
+    if (task.isEmpty()) {
+      log.warn("task '{}' not found", name);
+      throw new EntityNotFoundException("task not found");
     }
 
-    @Override
-    public Task findById(Long id) {
-        Optional<Task> task = repository.findById(id);
+    return task.get();
+  }
 
-        if (task.isEmpty()) {
-            log.warn("task with id '{}' not found", id);
-            throw new EntityNotFoundException("task not found");
-        }
-
-        return task.get();
+  @Override
+  public Task create(Task task) {
+    if (task.getId() != null) {
+      log.warn("task '{}' already exists", task.getName());
+      throw new EntityExistsException("task already exists");
     }
 
-    @Override
-    public Task findByName(String name) {
-        Optional<Task> task = repository.findByName(name);
+    return repository.save(task);
+  }
 
-        if (task.isEmpty()) {
-            log.warn("task '{}' not found", name);
-            throw new EntityNotFoundException("task not found");
-        }
-
-        return task.get();
+  @Override
+  public Task update(Task task) {
+    if (task.getId() == null) {
+      log.warn("task '{}' not found", task.getName());
+      throw new EntityNotFoundException("task not found");
     }
 
-    @Override
-    public Task create(Task task) {
-        if (task.getId() != null) {
-            log.warn("task '{}' already exists", task.getName());
-            throw new EntityExistsException("task already exists");
-        }
+    return repository.save(task);
+  }
 
-        return repository.save(task);
-    }
-
-    @Override
-    public Task update(Task task) {
-        if (task.getId() == null) {
-            log.warn("task '{}' not found", task.getName());
-            throw new EntityNotFoundException("task not found");
-        }
-
-        return repository.save(task);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        repository.deleteById(id);
-    }
+  @Override
+  public void deleteById(Long id) {
+    repository.deleteById(id);
+  }
 }

@@ -7,5 +7,5 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface ContestMapper {
 
-    ContestModel toModel(Contest contest);
+  ContestModel toModel(Contest contest);
 }

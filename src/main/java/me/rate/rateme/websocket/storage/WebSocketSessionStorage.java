@@ -11,5 +11,5 @@ import org.springframework.web.socket.WebSocketSession;
 @Component
 public class WebSocketSessionStorage {
 
-    private final Map<String, List<WebSocketSession>> sessions = new ConcurrentHashMap<>();
+  private final Map<String, List<WebSocketSession>> sessions = new ConcurrentHashMap<>();
 }

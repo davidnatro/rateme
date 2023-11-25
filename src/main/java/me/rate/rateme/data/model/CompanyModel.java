@@ -12,9 +12,9 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CompanyModel {
 
-    private String id;
-    private String name;
-    private String email;
-    private List<UserModel> employees;
-    private List<ContestModel> contests;
+  private String id;
+  private String name;
+  private String email;
+  private List<UserModel> employees;
+  private List<ContestModel> contests;
 }

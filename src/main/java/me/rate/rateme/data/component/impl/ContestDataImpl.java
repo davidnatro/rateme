@@ -18,64 +18,64 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ContestDataImpl implements ContestData {
 
-    private final ContestRepository repository;
+  private final ContestRepository repository;
 
-    @Override
-    public Page<Contest> findAllByCompanyId(Long companyId, Pageable pageable) {
-        return repository.findAllByCompanyId(companyId, pageable);
+  @Override
+  public Page<Contest> findAllByCompanyId(Long companyId, Pageable pageable) {
+    return repository.findAllByCompanyId(companyId, pageable);
+  }
+
+  @Override
+  public List<Contest> findAllByCompanyId(Long companyId) {
+    return repository.findAllByCompanyId(companyId);
+  }
+
+  @Override
+  public Contest findById(Long id) {
+    Optional<Contest> contest = repository.findById(id);
+
+    if (contest.isEmpty()) {
+      log.warn("contest with id '{}' not found", id);
+      throw new EntityNotFoundException("contest not found");
     }
 
-    @Override
-    public List<Contest> findAllByCompanyId(Long companyId) {
-        return repository.findAllByCompanyId(companyId);
+    return contest.get();
+  }
+
+  @Override
+  public Contest findByName(String name) {
+    Optional<Contest> contest = repository.findByName(name);
+
+    if (contest.isEmpty()) {
+      log.warn("contest '{}' not found", name);
+      throw new EntityNotFoundException("contest not found");
     }
 
-    @Override
-    public Contest findById(Long id) {
-        Optional<Contest> contest = repository.findById(id);
+    return contest.get();
+  }
 
-        if (contest.isEmpty()) {
-            log.warn("contest with id '{}' not found", id);
-            throw new EntityNotFoundException("contest not found");
-        }
-
-        return contest.get();
+  @Override
+  public Contest create(Contest contest) {
+    if (contest.getId() != null) {
+      log.warn("contest '{}' already exists", contest.getName());
+      throw new EntityExistsException("contest already exists");
     }
 
-    @Override
-    public Contest findByName(String name) {
-        Optional<Contest> contest = repository.findByName(name);
+    return repository.save(contest);
+  }
 
-        if (contest.isEmpty()) {
-            log.warn("contest '{}' not found", name);
-            throw new EntityNotFoundException("contest not found");
-        }
-
-        return contest.get();
+  @Override
+  public Contest update(Contest contest) {
+    if (contest.getId() == null) {
+      log.warn("contest '{}' not found", contest.getName());
+      throw new EntityNotFoundException("contest not found");
     }
 
-    @Override
-    public Contest create(Contest contest) {
-        if (contest.getId() != null) {
-            log.warn("contest '{}' already exists", contest.getName());
-            throw new EntityExistsException("contest already exists");
-        }
+    return repository.save(contest);
+  }
 
-        return repository.save(contest);
-    }
-
-    @Override
-    public Contest update(Contest contest) {
-        if (contest.getId() == null) {
-            log.warn("contest '{}' not found", contest.getName());
-            throw new EntityNotFoundException("contest not found");
-        }
-
-        return repository.save(contest);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        repository.deleteById(id);
-    }
+  @Override
+  public void deleteById(Long id) {
+    repository.deleteById(id);
+  }
 }
