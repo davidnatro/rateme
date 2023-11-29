@@ -43,7 +43,8 @@ public class Company {
   private Set<Contest> contests = new HashSet<>();
 
   @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.DETACH })
-  @JoinTable(name = "company_employees", joinColumns = @JoinColumn(name = "company_id"),
+  @JoinTable(
+      name = "company_employees", joinColumns = @JoinColumn(name = "company_id"),
       inverseJoinColumns = @JoinColumn(name = "user_id"))
   private Set<User> employees = new HashSet<>();
 

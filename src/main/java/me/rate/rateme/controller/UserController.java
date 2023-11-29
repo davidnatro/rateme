@@ -33,35 +33,39 @@ public class UserController {
 
   @GetMapping
   @Operation(summary = "get all users")
-  @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Page of users"),
-      @ApiResponse(responseCode = "401", description = "Unauthorized access") })
+  @ApiResponses(
+      value = { @ApiResponse(responseCode = "200", description = "Page of users"),
+          @ApiResponse(responseCode = "401", description = "Unauthorized access") })
   public ResponseEntity<Page<UserModel>> getAllPageable(@PageableDefault Pageable pageable) {
     return ResponseEntity.ok(userService.findAll(pageable));
   }
 
   @GetMapping("/{username}")
   @Operation(summary = "get user by username")
-  @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "User"),
-      @ApiResponse(responseCode = "401", description = "Unauthorized access"),
-      @ApiResponse(responseCode = "404", description = "User not found") })
+  @ApiResponses(
+      value = { @ApiResponse(responseCode = "200", description = "User"),
+          @ApiResponse(responseCode = "401", description = "Unauthorized access"),
+          @ApiResponse(responseCode = "404", description = "User not found") })
   public ResponseEntity<UserModel> getByUsername(@PathVariable String username) {
     return ResponseEntity.ok(userService.findByUsername(username));
   }
 
   @PostMapping
   @Operation(summary = "create user")
-  @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Created user"),
-      @ApiResponse(responseCode = "401", description = "Unauthorized access"),
-      @ApiResponse(responseCode = "409", description = "User already exists") })
+  @ApiResponses(
+      value = { @ApiResponse(responseCode = "200", description = "Created user"),
+          @ApiResponse(responseCode = "401", description = "Unauthorized access"),
+          @ApiResponse(responseCode = "409", description = "User already exists") })
   public ResponseEntity<UserModel> createUser(@Valid @RequestBody CreateUserDto request) {
     return ResponseEntity.ok(userService.create(request));
   }
 
   @PutMapping("/{username}")
   @Operation(summary = "update user")
-  @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Created user"),
-      @ApiResponse(responseCode = "401", description = "Unauthorized access"),
-      @ApiResponse(responseCode = "404", description = "User not found") })
+  @ApiResponses(
+      value = { @ApiResponse(responseCode = "200", description = "Created user"),
+          @ApiResponse(responseCode = "401", description = "Unauthorized access"),
+          @ApiResponse(responseCode = "404", description = "User not found") })
   public ResponseEntity<UserModel> updateUser(@PathVariable String username,
                                               @Valid @RequestBody UpdateUserDto request) {
     return ResponseEntity.ok(userService.updateByUsername(username, request));
@@ -69,8 +73,9 @@ public class UserController {
 
   @DeleteMapping("/{username}")
   @Operation(summary = "delete user")
-  @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Created user"),
-      @ApiResponse(responseCode = "401", description = "Unauthorized access") })
+  @ApiResponses(
+      value = { @ApiResponse(responseCode = "200", description = "Created user"),
+          @ApiResponse(responseCode = "401", description = "Unauthorized access") })
   public ResponseEntity<Void> deleteUser(@PathVariable String username) {
     userService.deleteByUsername(username);
     return ResponseEntity.noContent().build();

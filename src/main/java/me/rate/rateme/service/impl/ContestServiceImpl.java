@@ -36,13 +36,10 @@ public class ContestServiceImpl implements ContestService {
 
   @Override
   public List<TaskModel> findAllContestTasks(String companyName, String contestName) {
-    return companyService.findByName(companyName)
-        .getContests()
-        .stream()
-        .filter(contest -> contest.getName().equals(contestName))
-        .findFirst()
-        .orElseThrow(() -> new EntityNotFoundException("Contest not found"))
-        .getTasks();
+    return companyService.findByName(companyName).getContests().stream()
+                         .filter(contest -> contest.getName().equals(contestName)).findFirst()
+                         .orElseThrow(() -> new EntityNotFoundException("Contest not found"))
+                         .getTasks();
   }
 
   @Override
@@ -55,17 +52,12 @@ public class ContestServiceImpl implements ContestService {
     }
 
     Company company = companyService.findByNameEntity(companyName);
-    Contest contest = company.getContests()
-        .stream()
-        .filter(c -> c.getName().equals(contestName))
-        .findFirst()
-        .orElseThrow(() -> new EntityNotFoundException("Contest not found"));
+    Contest contest = company.getContests().stream().filter(c -> c.getName().equals(contestName))
+                             .findFirst()
+                             .orElseThrow(() -> new EntityNotFoundException("Contest not found"));
 
-    Task task = contest.getTasks()
-        .stream()
-        .filter(t -> t.getName().equals(taskName))
-        .findFirst()
-        .orElseThrow(() -> new EntityNotFoundException("Task not found"));
+    Task task = contest.getTasks().stream().filter(t -> t.getName().equals(taskName)).findFirst()
+                       .orElseThrow(() -> new EntityNotFoundException("Task not found"));
 
     TaskModel taskModel = taskMapper.toModel(task);
 
@@ -99,10 +91,8 @@ public class ContestServiceImpl implements ContestService {
   public void createTask(String companyName, String contestName, CreateTaskDto createTaskDto) {
     Company company = companyService.checkIfUserHasAccessToCompany(companyName);
 
-    Optional<Contest> contest = company.getContests()
-        .stream()
-        .filter(c -> c.getName().equals(contestName))
-        .findFirst();
+    Optional<Contest> contest = company.getContests().stream()
+                                       .filter(c -> c.getName().equals(contestName)).findFirst();
 
     if (contest.isEmpty()) {
       log.warn("Contest '{}' for company '{}' not found. Unable to create new task", contestName,
@@ -124,10 +114,8 @@ public class ContestServiceImpl implements ContestService {
   public void deleteTask(String companyName, String contestName, String taskName) {
     Company company = companyService.checkIfUserHasAccessToCompany(companyName);
 
-    Optional<Contest> contest = company.getContests()
-        .stream()
-        .filter(c -> c.getName().equals(contestName))
-        .findFirst();
+    Optional<Contest> contest = company.getContests().stream()
+                                       .filter(c -> c.getName().equals(contestName)).findFirst();
 
     if (contest.isEmpty()) {
       log.warn("Contest '{}' for company '{}' not found. Unable to delete task '{}'", contestName,

@@ -10,6 +10,7 @@ import me.rate.rateme.data.dto.LanguageDto;
 import me.rate.rateme.service.JudgeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,9 +24,19 @@ public class JudgeController {
 
   @GetMapping("/languages")
   @Operation(summary = "get all available programming languages")
-  @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "List of languages"),
-      @ApiResponse(responseCode = "401", description = "Unauthorized access") })
+  @ApiResponses(
+      value = { @ApiResponse(responseCode = "200", description = "List of languages"),
+          @ApiResponse(responseCode = "401", description = "Unauthorized access") })
   public ResponseEntity<List<LanguageDto>> getLanguages() {
     return ResponseEntity.ok(judgeService.getLanguages());
+  }
+
+  @PostMapping("/submit")
+  @Operation(summary = "submit solution")
+  @ApiResponses(
+      value = { @ApiResponse(responseCode = "200", description = "Solution submitted"),
+          @ApiResponse(responseCode = "401", description = "Unauthorized access") })
+  public ResponseEntity<Boolean> submitSolution() {
+    return ResponseEntity.ok(judgeService.checkSolution());
   }
 }

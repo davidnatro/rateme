@@ -76,9 +76,8 @@ public class CompanyServiceImpl implements CompanyService {
 
     Company company = companyData.findByName(companyName);
 
-    if (company.getEmployees()
-        .stream()
-        .noneMatch(u -> u.getUsername().equals(user.getUsername()))) {
+    if (company.getEmployees().stream()
+               .noneMatch(u -> u.getUsername().equals(user.getUsername()))) {
       log.warn("User {} is not an employee of company {} trying to create contest",
                user.getUsername(), companyName);
       throw new AccessDeniedException("You are not an employee of this company");

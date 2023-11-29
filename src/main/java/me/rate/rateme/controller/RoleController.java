@@ -31,34 +31,38 @@ public class RoleController {
 
   @GetMapping
   @Operation(summary = "get all roles")
-  @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Page of roles"),
-      @ApiResponse(responseCode = "401", description = "Unauthorized access") })
+  @ApiResponses(
+      value = { @ApiResponse(responseCode = "200", description = "Page of roles"),
+          @ApiResponse(responseCode = "401", description = "Unauthorized access") })
   public ResponseEntity<Page<RoleModel>> getAllPageable(@PageableDefault Pageable pageable) {
     return ResponseEntity.ok(roleService.findAll(pageable));
   }
 
   @GetMapping("/{name}")
   @Operation(summary = "get role by name")
-  @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Role"),
-      @ApiResponse(responseCode = "401", description = "Unauthorized access"),
-      @ApiResponse(responseCode = "404", description = "Role not found") })
+  @ApiResponses(
+      value = { @ApiResponse(responseCode = "200", description = "Role"),
+          @ApiResponse(responseCode = "401", description = "Unauthorized access"),
+          @ApiResponse(responseCode = "404", description = "Role not found") })
   public ResponseEntity<RoleModel> getByName(@PathVariable String name) {
     return ResponseEntity.ok(roleService.findByName(name));
   }
 
   @PostMapping
   @Operation(summary = "create role")
-  @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Created role"),
-      @ApiResponse(responseCode = "401", description = "Unauthorized access"),
-      @ApiResponse(responseCode = "409", description = "Role already exists") })
+  @ApiResponses(
+      value = { @ApiResponse(responseCode = "200", description = "Created role"),
+          @ApiResponse(responseCode = "401", description = "Unauthorized access"),
+          @ApiResponse(responseCode = "409", description = "Role already exists") })
   public ResponseEntity<RoleModel> createRole(@Valid @RequestBody CreateRoleDto request) {
     return ResponseEntity.ok(roleService.create(request));
   }
 
   @DeleteMapping("/{name}")
   @Operation(summary = "delete role")
-  @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Created role"),
-      @ApiResponse(responseCode = "401", description = "Unauthorized access") })
+  @ApiResponses(
+      value = { @ApiResponse(responseCode = "200", description = "Created role"),
+          @ApiResponse(responseCode = "401", description = "Unauthorized access") })
   public ResponseEntity<Void> deleteRole(@PathVariable String name) {
     roleService.deleteByName(name);
     return ResponseEntity.noContent().build();

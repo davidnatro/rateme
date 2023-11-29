@@ -32,8 +32,9 @@ public class ContestController {
 
   @GetMapping
   @Operation(summary = "get all company's contests")
-  @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Page of contests"),
-      @ApiResponse(responseCode = "401", description = "Unauthorized access") })
+  @ApiResponses(
+      value = { @ApiResponse(responseCode = "200", description = "Page of contests"),
+          @ApiResponse(responseCode = "401", description = "Unauthorized access") })
   public ResponseEntity<List<ContestModel>> getAllCompanyContests(
       @RequestParam String companyName) {
     return ResponseEntity.ok(contestService.findAllCompanyContests(companyName));
@@ -41,8 +42,9 @@ public class ContestController {
 
   @GetMapping("/{contestName}/tasks")
   @Operation(summary = "get all contest's tasks")
-  @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Page of contests"),
-      @ApiResponse(responseCode = "401", description = "Unauthorized access") })
+  @ApiResponses(
+      value = { @ApiResponse(responseCode = "200", description = "Page of contests"),
+          @ApiResponse(responseCode = "401", description = "Unauthorized access") })
   public ResponseEntity<List<TaskModel>> getAllCompanyContestTasks(@PathVariable String contestName,
                                                                    @RequestParam String companyName) {
     return ResponseEntity.ok(contestService.findAllContestTasks(companyName, contestName));
@@ -50,9 +52,10 @@ public class ContestController {
 
   @GetMapping("/{contestName}/tasks/{taskName}")
   @Operation(summary = "get task")
-  @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Task"),
-      @ApiResponse(responseCode = "401", description = "Unauthorized access"),
-      @ApiResponse(responseCode = "404", description = "Company or contest or task not found") })
+  @ApiResponses(
+      value = { @ApiResponse(responseCode = "200", description = "Task"),
+          @ApiResponse(responseCode = "401", description = "Unauthorized access"), @ApiResponse(
+          responseCode = "404", description = "Company or contest or task not found") })
   public ResponseEntity<TaskModel> getTask(@PathVariable String contestName,
                                            @PathVariable String taskName,
                                            @RequestParam String companyName) {
@@ -86,10 +89,11 @@ public class ContestController {
 
   @DeleteMapping("/{contestName}/task/{taskName}")
   @Operation(summary = "delete task")
-  @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Deleted task"),
-      @ApiResponse(responseCode = "401", description = "Unauthorized access"),
-      @ApiResponse(responseCode = "403", description = "Forbidden access"),
-      @ApiResponse(responseCode = "404", description = "Company or contest or task not found") })
+  @ApiResponses(
+      value = { @ApiResponse(responseCode = "200", description = "Deleted task"),
+          @ApiResponse(responseCode = "401", description = "Unauthorized access"),
+          @ApiResponse(responseCode = "403", description = "Forbidden access"), @ApiResponse(
+          responseCode = "404", description = "Company or contest or task not found") })
   public ResponseEntity<Void> deleteTask(@PathVariable String contestName,
                                          @PathVariable String taskName,
                                          @RequestParam String companyName) {
@@ -98,12 +102,13 @@ public class ContestController {
     return ResponseEntity.noContent().build();
   }
 
-  @DeleteMapping("/contest/{contestName}")
+  @DeleteMapping("/{contestName}")
   @Operation(summary = "delete contest")
-  @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Deleted contest"),
-      @ApiResponse(responseCode = "401", description = "Unauthorized access"),
-      @ApiResponse(responseCode = "403", description = "Forbidden access"),
-      @ApiResponse(responseCode = "404", description = "Company or contest not found") })
+  @ApiResponses(
+      value = { @ApiResponse(responseCode = "200", description = "Deleted contest"),
+          @ApiResponse(responseCode = "401", description = "Unauthorized access"),
+          @ApiResponse(responseCode = "403", description = "Forbidden access"),
+          @ApiResponse(responseCode = "404", description = "Company or contest not found") })
   public ResponseEntity<Void> deleteContest(@PathVariable String contestName,
                                             @RequestParam String companyName) {
     contestService.deleteContest(companyName, contestName);

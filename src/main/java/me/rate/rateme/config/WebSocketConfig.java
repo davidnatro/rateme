@@ -20,9 +20,9 @@ public class WebSocketConfig implements WebSocketConfigurer {
   @Override
   public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
     registry.addHandler(codeStreamingHandler, property.getRoomPath())
-        .setHandshakeHandler(handshakeHandler())
-        .addInterceptors(new PathVariableExtractor(property.getRoomPath()))
-        .setAllowedOrigins("*");
+            .setHandshakeHandler(handshakeHandler())
+            .addInterceptors(new PathVariableExtractor(property.getRoomPath()))
+            .setAllowedOrigins("*");
   }
 
   private DefaultHandshakeHandler handshakeHandler() {
