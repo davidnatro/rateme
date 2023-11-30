@@ -14,7 +14,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 @SpringBootApplication
 public class RatemeApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(RatemeApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(RatemeApplication.class, args);
+  }
 }

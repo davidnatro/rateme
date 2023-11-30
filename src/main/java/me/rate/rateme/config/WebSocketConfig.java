@@ -14,18 +14,18 @@ import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketConfigurer {
 
-    private final WebSocketProperty property;
-    private final CodeStreamingHandler codeStreamingHandler;
+  private final WebSocketProperty property;
+  private final CodeStreamingHandler codeStreamingHandler;
 
-    @Override
-    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(codeStreamingHandler, property.getRoomPath())
-                .setHandshakeHandler(handshakeHandler())
-                .addInterceptors(new PathVariableExtractor(property.getRoomPath()))
-                .setAllowedOrigins("*");
-    }
+  @Override
+  public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+    registry.addHandler(codeStreamingHandler, property.getRoomPath())
+            .setHandshakeHandler(handshakeHandler())
+            .addInterceptors(new PathVariableExtractor(property.getRoomPath()))
+            .setAllowedOrigins("*");
+  }
 
-    private DefaultHandshakeHandler handshakeHandler() {
-        return new DefaultHandshakeHandler(new TomcatRequestUpgradeStrategy());
-    }
+  private DefaultHandshakeHandler handshakeHandler() {
+    return new DefaultHandshakeHandler(new TomcatRequestUpgradeStrategy());
+  }
 }

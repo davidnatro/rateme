@@ -27,57 +27,57 @@ import org.hibernate.type.SqlTypes;
 @Table(name = "tasks")
 public class Task {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    private String name;
+  private String name;
 
-    private String pictureKey;
+  private String pictureKey;
 
-    private String description;
+  private String description;
 
-    private String inputFormat;
+  private String inputFormat;
 
-    private String outputFormat;
+  private String outputFormat;
 
-    private String codeExample;
+  private String codeExample;
 
-    @Enumerated(EnumType.STRING)
-    private Difficulty difficulty;
+  @Enumerated(EnumType.STRING)
+  private Difficulty difficulty;
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb")
-    private Map<String, Object> inputData;
+  @JdbcTypeCode(SqlTypes.JSON)
+  @Column(columnDefinition = "jsonb")
+  private Map<String, Object> inputData;
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb")
-    private Map<String, Object> outputData;
+  @JdbcTypeCode(SqlTypes.JSON)
+  @Column(columnDefinition = "jsonb")
+  private Map<String, Object> outputData;
 
-    @ManyToOne
-    @JoinColumn(name = "contest_id")
-    private Contest contest;
+  @ManyToOne
+  @JoinColumn(name = "contest_id")
+  private Contest contest;
 
-    @CreationTimestamp
-    private ZonedDateTime created;
+  @CreationTimestamp
+  private ZonedDateTime created;
 
-    @UpdateTimestamp
-    private ZonedDateTime modified;
+  @UpdateTimestamp
+  private ZonedDateTime modified;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Task task = (Task) o;
-        return Objects.equals(name, task.name);
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
+    Task task = (Task) o;
+    return Objects.equals(name, task.name);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name);
+  }
 }

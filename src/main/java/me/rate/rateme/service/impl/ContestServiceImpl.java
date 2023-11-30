@@ -25,130 +25,116 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ContestServiceImpl implements ContestService {
 
-    private final TaskMapper taskMapper;
-    private final CompanyService companyService;
-    private final RedisStringOperations<String, TaskModel> taskCache;
+  private final TaskMapper taskMapper;
+  private final CompanyService companyService;
+  private final RedisStringOperations<String, TaskModel> taskCache;
 
-    @Override
-    public List<ContestModel> findAllCompanyContests(String companyName) {
-        return companyService.findByName(companyName).getContests();
+  @Override
+  public List<ContestModel> findAllCompanyContests(String companyName) {
+    return companyService.findByName(companyName).getContests();
+  }
+
+  @Override
+  public List<TaskModel> findAllContestTasks(String companyName, String contestName) {
+    return companyService.findByName(companyName).getContests().stream()
+                         .filter(contest -> contest.getName().equals(contestName)).findFirst()
+                         .orElseThrow(() -> new EntityNotFoundException("Contest not found"))
+                         .getTasks();
+  }
+
+  @Override
+  public TaskModel findContestTask(String companyName, String contestName, String taskName) {
+    String key = RedisKey.TASK.key + buildTaskCacheKey(companyName, contestName, taskName);
+
+    if (taskCache.exists(key)) {
+      taskCache.expire(key, Duration.ofHours(RedisKey.TASK.ttlInHours).toSeconds());
+      return taskCache.get(key);
     }
 
-    @Override
-    public List<TaskModel> findAllContestTasks(String companyName, String contestName) {
-        return companyService.findByName(companyName)
-                .getContests()
-                .stream()
-                .filter(contest -> contest.getName().equals(contestName))
-                .findFirst()
-                .orElseThrow(() -> new EntityNotFoundException("Contest not found"))
-                .getTasks();
+    Company company = companyService.findByNameEntity(companyName);
+    Contest contest = company.getContests().stream().filter(c -> c.getName().equals(contestName))
+                             .findFirst()
+                             .orElseThrow(() -> new EntityNotFoundException("Contest not found"));
+
+    Task task = contest.getTasks().stream().filter(t -> t.getName().equals(taskName)).findFirst()
+                       .orElseThrow(() -> new EntityNotFoundException("Task not found"));
+
+    TaskModel taskModel = taskMapper.toModel(task);
+
+    taskCache.set(key, taskModel);
+    taskCache.expire(key, Duration.ofHours(RedisKey.TASK.ttlInHours).toSeconds());
+
+    return taskModel;
+  }
+
+  @Override
+  public void createContest(String companyName, CreateContestDto createContestDto) {
+    Company company = companyService.checkIfUserHasAccessToCompany(companyName);
+
+    Contest contest = new Contest();
+    contest.setName(createContestDto.name());
+    contest.setCompany(company);
+
+    company.getContests().add(contest);
+    companyService.update(company);
+  }
+
+  @Override
+  public void deleteContest(String companyName, String contestName) {
+    Company company = companyService.checkIfUserHasAccessToCompany(companyName);
+
+    company.getContests().removeIf(contest -> contest.getName().equals(contestName));
+    companyService.update(company);
+  }
+
+  @Override
+  public void createTask(String companyName, String contestName, CreateTaskDto createTaskDto) {
+    Company company = companyService.checkIfUserHasAccessToCompany(companyName);
+
+    Optional<Contest> contest = company.getContests().stream()
+                                       .filter(c -> c.getName().equals(contestName)).findFirst();
+
+    if (contest.isEmpty()) {
+      log.warn("Contest '{}' for company '{}' not found. Unable to create new task", contestName,
+               companyName);
+      throw new EntityNotFoundException("Contest not found");
     }
 
-    @Override
-    public TaskModel findContestTask(String companyName, String contestName, String taskName) {
-        String key = RedisKey.TASK.key + buildTaskCacheKey(companyName, contestName, taskName);
+    Task task = new Task();
+    task.setContest(contest.get());
+    taskMapper.updateEntity(task, createTaskDto);
 
-        if (taskCache.exists(key)) {
-            taskCache.expire(key, Duration.ofHours(RedisKey.TASK.ttlInHours).toSeconds());
-            return taskCache.get(key);
-        }
+    contest.get().getTasks().remove(task);
+    contest.get().getTasks().add(task);
 
-        Company company = companyService.findByNameEntity(companyName);
-        Contest contest = company.getContests()
-                .stream()
-                .filter(c -> c.getName().equals(contestName))
-                .findFirst()
-                .orElseThrow(() -> new EntityNotFoundException("Contest not found"));
+    companyService.update(company);
+  }
 
-        Task task = contest.getTasks()
-                .stream()
-                .filter(t -> t.getName().equals(taskName))
-                .findFirst()
-                .orElseThrow(() -> new EntityNotFoundException("Task not found"));
+  @Override
+  public void deleteTask(String companyName, String contestName, String taskName) {
+    Company company = companyService.checkIfUserHasAccessToCompany(companyName);
 
-        TaskModel taskModel = taskMapper.toModel(task);
+    Optional<Contest> contest = company.getContests().stream()
+                                       .filter(c -> c.getName().equals(contestName)).findFirst();
 
-        taskCache.set(key, taskModel);
-        taskCache.expire(key, Duration.ofHours(RedisKey.TASK.ttlInHours).toSeconds());
-
-        return taskModel;
+    if (contest.isEmpty()) {
+      log.warn("Contest '{}' for company '{}' not found. Unable to delete task '{}'", contestName,
+               companyName, taskName);
+      throw new EntityNotFoundException("Contest not found");
     }
 
-    @Override
-    public void createContest(String companyName, CreateContestDto createContestDto) {
-        Company company = companyService.checkIfUserHasAccessToCompany(companyName);
+    boolean removed = contest.get().getTasks().removeIf(task -> task.getName().equals(taskName));
 
-        Contest contest = new Contest();
-        contest.setName(createContestDto.name());
-        contest.setCompany(company);
-
-        company.getContests().add(contest);
-        companyService.update(company);
+    if (!removed) {
+      log.warn("Task '{}' for contest '{}' for company '{}' not found. Unable to delete task",
+               taskName, contestName, companyName);
+      throw new EntityNotFoundException("Task not found");
     }
 
-    @Override
-    public void deleteContest(String companyName, String contestName) {
-        Company company = companyService.checkIfUserHasAccessToCompany(companyName);
+    companyService.update(company);
+  }
 
-        company.getContests().removeIf(contest -> contest.getName().equals(contestName));
-        companyService.update(company);
-    }
-
-    @Override
-    public void createTask(String companyName, String contestName, CreateTaskDto createTaskDto) {
-        Company company = companyService.checkIfUserHasAccessToCompany(companyName);
-
-        Optional<Contest> contest = company.getContests()
-                .stream()
-                .filter(c -> c.getName().equals(contestName))
-                .findFirst();
-
-        if (contest.isEmpty()) {
-            log.warn("Contest '{}' for company '{}' not found. Unable to create new task",
-                     contestName, companyName);
-            throw new EntityNotFoundException("Contest not found");
-        }
-
-        Task task = new Task();
-        task.setContest(contest.get());
-        taskMapper.updateEntity(task, createTaskDto);
-
-        contest.get().getTasks().remove(task);
-        contest.get().getTasks().add(task);
-
-        companyService.update(company);
-    }
-
-    @Override
-    public void deleteTask(String companyName, String contestName, String taskName) {
-        Company company = companyService.checkIfUserHasAccessToCompany(companyName);
-
-        Optional<Contest> contest = company.getContests()
-                .stream()
-                .filter(c -> c.getName().equals(contestName))
-                .findFirst();
-
-        if (contest.isEmpty()) {
-            log.warn("Contest '{}' for company '{}' not found. Unable to delete task '{}'",
-                     contestName, companyName, taskName);
-            throw new EntityNotFoundException("Contest not found");
-        }
-
-        boolean removed = contest.get()
-                .getTasks()
-                .removeIf(task -> task.getName().equals(taskName));
-
-        if (!removed) {
-            log.warn("Task '{}' for contest '{}' for company '{}' not found. Unable to delete task",
-                     taskName, contestName, companyName);
-            throw new EntityNotFoundException("Task not found");
-        }
-
-        companyService.update(company);
-    }
-
-    private String buildTaskCacheKey(String companyName, String contestName, String taskName) {
-        return String.format("%s:%s:%s", companyName, contestName, taskName);
-    }
+  private String buildTaskCacheKey(String companyName, String contestName, String taskName) {
+    return String.format("%s:%s:%s", companyName, contestName, taskName);
+  }
 }

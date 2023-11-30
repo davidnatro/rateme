@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum RedisKey {
 
-    TASK("tasks:", 2L);
+  TASK("tasks:", 2L);
 
-    public final String key;
-    public final Long ttlInHours;
+  public final String key;
+  public final Long ttlInHours;
 }

@@ -25,42 +25,43 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Table(name = "companies")
 public class Company {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    private String name;
+  private String name;
 
-    private String email;
+  private String email;
 
-    @CreationTimestamp
-    private ZonedDateTime created;
+  @CreationTimestamp
+  private ZonedDateTime created;
 
-    @UpdateTimestamp
-    private ZonedDateTime modified;
+  @UpdateTimestamp
+  private ZonedDateTime modified;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Contest> contests = new HashSet<>();
+  @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+  private Set<Contest> contests = new HashSet<>();
 
-    @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.DETACH })
-    @JoinTable(name = "company_employees", joinColumns = @JoinColumn(name = "company_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User> employees = new HashSet<>();
+  @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.DETACH })
+  @JoinTable(
+      name = "company_employees", joinColumns = @JoinColumn(name = "company_id"),
+      inverseJoinColumns = @JoinColumn(name = "user_id"))
+  private Set<User> employees = new HashSet<>();
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Company company = (Company) o;
-        return Objects.equals(name, company.name);
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
+    Company company = (Company) o;
+    return Objects.equals(name, company.name);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name);
+  }
 }

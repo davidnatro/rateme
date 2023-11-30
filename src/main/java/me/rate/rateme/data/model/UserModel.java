@@ -12,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserModel {
 
-    private Long id;
-    private String username;
-    private List<RoleModel> roles;
+  private Long id;
+  private String username;
+  private List<RoleModel> roles;
 }

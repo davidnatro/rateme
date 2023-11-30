@@ -7,15 +7,15 @@ import org.springframework.data.domain.Pageable;
 
 public interface RoleData {
 
-    Page<Role> findAll(Pageable pageable);
+  Page<Role> findAll(Pageable pageable);
 
-    List<Role> findAll();
+  List<Role> findAll();
 
-    Role findByName(String name);
+  Role findByName(String name);
 
-    Role create(Role role);
+  Role create(Role role);
 
-    Role update(Role role);
+  Role update(Role role);
 
-    void deleteByName(String name);
+  void deleteByName(String name);
 }

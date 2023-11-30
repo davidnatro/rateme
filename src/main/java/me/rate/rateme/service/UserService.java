@@ -8,13 +8,13 @@ import org.springframework.data.domain.Pageable;
 
 public interface UserService {
 
-    Page<UserModel> findAll(Pageable pageable);
+  Page<UserModel> findAll(Pageable pageable);
 
-    UserModel findByUsername(String username);
+  UserModel findByUsername(String username);
 
-    UserModel create(CreateUserDto request);
+  UserModel create(CreateUserDto request);
 
-    UserModel updateByUsername(String username, UpdateUserDto request);
+  UserModel updateByUsername(String username, UpdateUserDto request);
 
-    void deleteByUsername(String username);
+  void deleteByUsername(String username);
 }

@@ -18,64 +18,64 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class CompanyDataImpl implements CompanyData {
 
-    private final CompanyRepository repository;
+  private final CompanyRepository repository;
 
-    @Override
-    public Page<Company> findAll(Pageable pageable) {
-        return repository.findAll(pageable);
+  @Override
+  public Page<Company> findAll(Pageable pageable) {
+    return repository.findAll(pageable);
+  }
+
+  @Override
+  public List<Company> findAll() {
+    return repository.findAll();
+  }
+
+  @Override
+  public Company findById(Long id) {
+    Optional<Company> company = repository.findById(id);
+
+    if (company.isEmpty()) {
+      log.warn("company with id '{}' not found", id);
+      throw new EntityNotFoundException("company not found");
     }
 
-    @Override
-    public List<Company> findAll() {
-        return repository.findAll();
+    return company.get();
+  }
+
+  @Override
+  public Company findByName(String name) {
+    Optional<Company> company = repository.findByName(name);
+
+    if (company.isEmpty()) {
+      log.warn("company '{}' not found", name);
+      throw new EntityNotFoundException("company not found");
     }
 
-    @Override
-    public Company findById(Long id) {
-        Optional<Company> company = repository.findById(id);
+    return company.get();
+  }
 
-        if (company.isEmpty()) {
-            log.warn("company with id '{}' not found", id);
-            throw new EntityNotFoundException("company not found");
-        }
-
-        return company.get();
+  @Override
+  public Company create(Company company) {
+    if (repository.existsByName(company.getName())) {
+      log.warn("company '{}' already exists", company.getName());
+      throw new EntityExistsException("company already exists");
     }
 
-    @Override
-    public Company findByName(String name) {
-        Optional<Company> company = repository.findByName(name);
+    return repository.save(company);
+  }
 
-        if (company.isEmpty()) {
-            log.warn("company '{}' not found", name);
-            throw new EntityNotFoundException("company not found");
-        }
-
-        return company.get();
+  @Override
+  public Company update(Company company) {
+    if (!repository.existsById(company.getId())) {
+      log.warn("company with id '{}' not found", company.getId());
+      throw new EntityNotFoundException("company not found");
     }
 
-    @Override
-    public Company create(Company company) {
-        if (repository.existsByName(company.getName())) {
-            log.warn("company '{}' already exists", company.getName());
-            throw new EntityExistsException("company already exists");
-        }
+    return repository.save(company);
+  }
 
-        return repository.save(company);
-    }
-
-    @Override
-    public Company update(Company company) {
-        if (!repository.existsById(company.getId())) {
-            log.warn("company with id '{}' not found", company.getId());
-            throw new EntityNotFoundException("company not found");
-        }
-
-        return repository.save(company);
-    }
-
-    @Override
-    public void deleteByName(String name) {
-        repository.deleteByName(name);
-    }
+  @Override
+  public void deleteByName(String name) {
+    repository.deleteByName(name);
+  }
 }

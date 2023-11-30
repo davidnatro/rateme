@@ -11,9 +11,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
-    Page<Task> findAllByContestId(Long contestId, Pageable pageable);
+  Page<Task> findAllByContestId(Long contestId, Pageable pageable);
 
-    List<Task> findAllByContestId(Long contestId);
+  List<Task> findAllByContestId(Long contestId);
 
-    Optional<Task> findByName(String name);
+  Optional<Task> findByName(String name);
 }

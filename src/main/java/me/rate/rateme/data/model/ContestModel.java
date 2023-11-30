@@ -12,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ContestModel {
 
-    private Long id;
-    private String name;
-    private List<TaskModel> tasks;
+  private Long id;
+  private String name;
+  private List<TaskModel> tasks;
 }

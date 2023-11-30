@@ -8,17 +8,17 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserData extends UserDetailsService {
 
-    Page<User> findAll(Pageable pageable);
+  Page<User> findAll(Pageable pageable);
 
-    List<User> findAll();
+  List<User> findAll();
 
-    User findByUsername(String username);
+  User findByUsername(String username);
 
-    User findById(Long id);
+  User findById(Long id);
 
-    User create(User user);
+  User create(User user);
 
-    User update(User user);
+  User update(User user);
 
-    void deleteByUsername(String username);
+  void deleteByUsername(String username);
 }

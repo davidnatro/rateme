@@ -7,17 +7,17 @@ import org.springframework.data.domain.Pageable;
 
 public interface CompanyData {
 
-    Page<Company> findAll(Pageable pageable);
+  Page<Company> findAll(Pageable pageable);
 
-    List<Company> findAll();
+  List<Company> findAll();
 
-    Company findById(Long id);
+  Company findById(Long id);
 
-    Company findByName(String name);
+  Company findByName(String name);
 
-    Company create(Company company);
+  Company create(Company company);
 
-    Company update(Company company);
+  Company update(Company company);
 
-    void deleteByName(String name);
+  void deleteByName(String name);
 }

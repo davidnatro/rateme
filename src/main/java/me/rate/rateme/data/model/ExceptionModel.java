@@ -11,6 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ExceptionModel {
 
-    private String message;
-    private int status;
+  private String message;
+  private int status;
 }

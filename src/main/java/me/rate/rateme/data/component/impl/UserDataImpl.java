@@ -20,76 +20,76 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class UserDataImpl implements UserData {
 
-    private final UserRepository repository;
+  private final UserRepository repository;
 
-    @Override
-    public Page<User> findAll(Pageable pageable) {
-        return repository.findAll(pageable);
+  @Override
+  public Page<User> findAll(Pageable pageable) {
+    return repository.findAll(pageable);
+  }
+
+  @Override
+  public List<User> findAll() {
+    return repository.findAll();
+  }
+
+  @Override
+  public User findByUsername(String username) {
+    Optional<User> user = repository.findByUsername(username);
+
+    if (user.isEmpty()) {
+      log.warn("user '{}' not found", username);
+      throw new EntityNotFoundException("user not found");
     }
 
-    @Override
-    public List<User> findAll() {
-        return repository.findAll();
+    return user.get();
+  }
+
+  @Override
+  public User findById(Long id) {
+    Optional<User> user = repository.findById(id);
+
+    if (user.isEmpty()) {
+      log.warn("user with id '{}' not found", id);
+      throw new EntityNotFoundException("user not found");
     }
 
-    @Override
-    public User findByUsername(String username) {
-        Optional<User> user = repository.findByUsername(username);
+    return user.get();
+  }
 
-        if (user.isEmpty()) {
-            log.warn("user '{}' not found", username);
-            throw new EntityNotFoundException("user not found");
-        }
-
-        return user.get();
+  @Override
+  public User create(User user) {
+    if (repository.existsByUsername(user.getUsername())) {
+      log.warn("user '{}' already exists", user.getUsername());
+      throw new EntityExistsException("user already exists");
     }
 
-    @Override
-    public User findById(Long id) {
-        Optional<User> user = repository.findById(id);
+    return repository.save(user);
+  }
 
-        if (user.isEmpty()) {
-            log.warn("user with id '{}' not found", id);
-            throw new EntityNotFoundException("user not found");
-        }
-
-        return user.get();
+  @Override
+  public User update(User user) {
+    if (!repository.existsById(user.getId())) {
+      log.warn("user with id '{}' not found", user.getId());
+      throw new EntityNotFoundException("user not found");
     }
 
-    @Override
-    public User create(User user) {
-        if (repository.existsByUsername(user.getUsername())) {
-            log.warn("user '{}' already exists", user.getUsername());
-            throw new EntityExistsException("user already exists");
-        }
+    return repository.save(user);
+  }
 
-        return repository.save(user);
+  @Override
+  public void deleteByUsername(String username) {
+    repository.deleteByUsername(username);
+  }
+
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    Optional<User> userOptional = repository.findByUsername(username);
+
+    if (userOptional.isEmpty()) {
+      log.warn("user '{}' not found", username);
+      throw new UsernameNotFoundException("user not found");
     }
 
-    @Override
-    public User update(User user) {
-        if (!repository.existsById(user.getId())) {
-            log.warn("user with id '{}' not found", user.getId());
-            throw new EntityNotFoundException("user not found");
-        }
-
-        return repository.save(user);
-    }
-
-    @Override
-    public void deleteByUsername(String username) {
-        repository.deleteByUsername(username);
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> userOptional = repository.findByUsername(username);
-
-        if (userOptional.isEmpty()) {
-            log.warn("user '{}' not found", username);
-            throw new UsernameNotFoundException("user not found");
-        }
-
-        return userOptional.get();
-    }
+    return userOptional.get();
+  }
 }
