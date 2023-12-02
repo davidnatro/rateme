@@ -30,11 +30,21 @@ Content-Type: application/json
 Authorization: Basic admin password
 
 {
-  "name": "tinkoff"
+  "name": "tinkoff",
+  "email" : "tinkoff@tinkoff.ru"
 }
 
-### Create contest
+### Create contest as not employee
 
+POST http://localhost:8080/api/contest?companyName=tinkoff
+Content-Type: application/json
+Authorization: Basic username password
+
+{
+  "name": "tinkoff-contest"
+}
+
+### Create contest as employee
 POST http://localhost:8080/api/contest?companyName=tinkoff
 Content-Type: application/json
 Authorization: Basic admin password
@@ -75,4 +85,19 @@ Authorization: Basic username password
 
 ### Send submission
 
+POST http://localhost:8080/api/judge/submission
+Content-Type: application/json
+Authorization: Basic admin password
+
+{
+  "taskId": 1,
+  "judgeSubmission": {
+    "source_code": "#include <iostream>\nint main() { int x, y;\nstd::cin >> x >> y;\nstd::cout << x + y;\nreturn 0;\n}",
+    "language_id": 54
+  }
+}
+
 ### Check submission
+
+GET http://localhost:8080/api/judge/submission/1701510340473-1-4
+Authorization: Basic admin password

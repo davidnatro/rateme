@@ -11,6 +11,7 @@ import me.rate.rateme.data.entity.User;
 import me.rate.rateme.data.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
@@ -74,6 +75,11 @@ public class UserDataImpl implements UserData {
     }
 
     return repository.save(user);
+  }
+
+  @Override
+  public User getUserFromContext() {
+    return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
 
   @Override

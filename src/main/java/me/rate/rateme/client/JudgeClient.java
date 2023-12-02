@@ -2,7 +2,7 @@ package me.rate.rateme.client;
 
 import java.util.List;
 import me.rate.rateme.data.dto.LanguageDto;
-import me.rate.rateme.data.dto.SubmissionDto;
+import me.rate.rateme.data.dto.SubmissionDto.JudgeSubmissionDto;
 import me.rate.rateme.data.dto.SubmissionResponseDto;
 import me.rate.rateme.data.dto.SubmissionResultDto;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -21,5 +21,5 @@ public interface JudgeClient {
   SubmissionResultDto getSubmissionResult(@PathVariable String token);
 
   @PostMapping("/submissions")
-  SubmissionResponseDto submit(@RequestBody SubmissionDto submissionDto);
+  SubmissionResponseDto submit(@RequestBody JudgeSubmissionDto judgeSubmission);
 }
