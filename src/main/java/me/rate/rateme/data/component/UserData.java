@@ -20,5 +20,7 @@ public interface UserData extends UserDetailsService {
 
   User update(User user);
 
+  User getUserFromContext();
+
   void deleteByUsername(String username);
 }
