@@ -38,7 +38,7 @@ public class SecurityConfig {
                               .hasRole(ADMIN.name())
 
                               // judge
-                              .requestMatchers(GET, "/judge//languages").hasRole(USER.name())
+                              .requestMatchers("/judge/**").hasRole(USER.name())
 
                               // contest
                               .requestMatchers(GET, "/contest/**").hasRole(USER.name())

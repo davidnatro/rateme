@@ -14,7 +14,6 @@ import me.rate.rateme.service.CompanyService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -72,7 +71,7 @@ public class CompanyServiceImpl implements CompanyService {
 
   @Override
   public Company checkIfUserHasAccessToCompany(String companyName) {
-    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    User user = userData.getUserFromContext();
 
     Company company = companyData.findByName(companyName);
 
@@ -88,7 +87,7 @@ public class CompanyServiceImpl implements CompanyService {
 
   @Override
   public void checkIfCurrentUserIsHeadOfCompany() {
-    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    User user = userData.getUserFromContext();
 
     if (!user.isHeadOfCompany()) {
       log.warn("User {} is not a head of company trying to access forbidden action",
