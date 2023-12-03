@@ -1,6 +1,6 @@
 ### Get all roles
 
-GET http://localhost:8080/api/role
+GET http://10.114.0.4:80/api/role
 Authorization: Basic admin password
 
 ### Get all users

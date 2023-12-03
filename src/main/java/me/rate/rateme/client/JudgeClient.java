@@ -18,7 +18,7 @@ public interface JudgeClient {
   List<LanguageDto> getLanguages();
 
   @GetMapping(value = "/submissions/{token}")
-  SubmissionResultDto getSubmissionResult(@PathVariable String token);
+  SubmissionResultDto getSubmissionResult(@PathVariable(name = "token") String token);
 
   @PostMapping("/submissions")
   SubmissionResponseDto submit(@RequestBody JudgeSubmissionDto judgeSubmission);
