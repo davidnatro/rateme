@@ -18,6 +18,7 @@
 
   <properties>
     <java.version>17</java.version>
+    <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
     <spring-cloud.version>2022.0.4</spring-cloud.version>
     <springdoc-openapi.version>2.2.0</springdoc-openapi.version>
     <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
@@ -64,6 +65,15 @@
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-vault-config</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-bootstrap</artifactId>
     </dependency>
 
     <dependency>
@@ -133,7 +143,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
+        <version>${maven-compiler-plugin.version}</version>
         <configuration>
           <annotationProcessorPaths>
             <path>
