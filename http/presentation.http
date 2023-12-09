@@ -1,36 +1,91 @@
 ### Get all roles
 
-GET http://167.99.141.157:80/api/role
+GET http://10.114.0.4:80/api/role
 Authorization: Basic admin password
 
 ### Get all users
 
-GET http://167.99.141.157:80/api/user
+GET http://localhost:8080/api/user
 Authorization: Basic admin password
 
-### Get companies
+### Create user
 
-GET http://167.99.141.157:80/api/company
-Authorization: Basic admin password
+POST http://localhost:8080/api/user
+Content-Type: application/json
 
-### Get company's contests
+{
+  "username": "username",
+  "password": "password"
+}
 
-GET http://167.99.141.157:80/api/contest?companyName=tinkoff
+### Get created user
+
+GET http://localhost:8080/api/user/username
 Authorization: Basic username password
 
-### Get contest's tasks
+### Create company
 
-GET http://167.99.141.157:80/api/contest/tinkoff-contest/tasks?companyName=tinkoff
+POST http://localhost:8080/api/company
+Content-Type: application/json
 Authorization: Basic admin password
+
+{
+  "name": "tinkoff",
+  "email" : "tinkoff@tinkoff.ru"
+}
+
+### Create contest as not employee
+
+POST http://localhost:8080/api/contest?companyName=tinkoff
+Content-Type: application/json
+Authorization: Basic username password
+
+{
+  "name": "tinkoff-contest"
+}
+
+### Create contest as employee
+POST http://localhost:8080/api/contest?companyName=tinkoff
+Content-Type: application/json
+Authorization: Basic admin password
+
+{
+  "name": "tinkoff-contest"
+}
+
+### Create task
+
+POST http://localhost:8080/api/contest/tinkoff-contest/task?companyName=tinkoff
+Content-Type: application/json
+Authorization: Basic admin password
+
+{
+  "name": "sum task",
+  "description": "you need to find sum of two numbers",
+  "inputFormat": "two numbers separated by space",
+  "outputFormat": "sum of two input numbers",
+  "codeExample": "psvm",
+  "difficulty": "EASY",
+  "inputData": {
+    "1": "1 2",
+    "2": "3 4",
+    "3": "5 6"
+  },
+  "outputData": {
+    "1": "3",
+    "2": "7",
+    "3": "11"
+  }
+}
 
 ### Get langauges
 
-GET http://167.99.141.157:80/api/judge/languages
+GET http://localhost:8080/api/judge/languages
 Authorization: Basic username password
 
 ### Send submission
 
-POST http://167.99.141.157:80/api/judge/submission
+POST http://localhost:8080/api/judge/submission
 Content-Type: application/json
 Authorization: Basic admin password
 
@@ -44,5 +99,5 @@ Authorization: Basic admin password
 
 ### Check submission
 
-GET http://167.99.141.157:80/api/judge/submission/1701790759282-1-4
+GET http://localhost:8080/api/judge/submission/1701510340473-1-4
 Authorization: Basic admin password
