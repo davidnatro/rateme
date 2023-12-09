@@ -58,7 +58,9 @@ public class SecurityConfig {
                               .requestMatchers(GET, "/company/**").hasRole(USER.name())
                               .requestMatchers(POST, "/company/**").hasRole(COMPANY_HEAD.name())
                               .requestMatchers(PUT, "/company/**").hasRole(COMPANY_HEAD.name())
-                              .requestMatchers(DELETE, "/company/**").hasRole(COMPANY_HEAD.name()))
+                              .requestMatchers(DELETE, "/company/**").hasRole(COMPANY_HEAD.name())
+
+                              .requestMatchers(GET, "/room/**").permitAll())
                .httpBasic(Customizer.withDefaults()).build();
   }
 
