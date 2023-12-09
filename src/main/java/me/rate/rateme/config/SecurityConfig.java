@@ -60,7 +60,8 @@ public class SecurityConfig {
                               .requestMatchers(PUT, "/company/**").hasRole(COMPANY_HEAD.name())
                               .requestMatchers(DELETE, "/company/**").hasRole(COMPANY_HEAD.name())
 
-                              .requestMatchers(GET, "/room/**").permitAll())
+                              // websocket
+                              .requestMatchers(GET, "/room/**").hasRole(USER.name()))
                .httpBasic(Customizer.withDefaults()).build();
   }
 
